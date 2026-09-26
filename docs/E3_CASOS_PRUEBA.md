@@ -21,10 +21,10 @@ Cada caso incluye identificador, requerimiento asociado, técnica aplicada, prec
 
 | Técnica | Casos |
 |---|---:|
-| Partición de equivalencia | 15 |
+| Partición de equivalencia | 10 |
 | Análisis de valores límite | 8 |
 | Tabla de decisión | 7 |
-| Transición de estados | 8 |
+| Transición de estados | 7 |
 
 Un caso puede aportar evidencia a más de una técnica, pero en cada caso se declara una **técnica principal**.
 
