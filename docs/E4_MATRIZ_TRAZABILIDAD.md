@@ -4,7 +4,7 @@
 
 La matriz de trazabilidad relaciona los requerimientos definidos en E1 con los casos de prueba diseñados en E3, el resultado de su ejecución y los defectos derivados.
 
-En este momento los casos se encuentran **diseñados pero todavía no ejecutados formalmente en la herramienta de gestión de pruebas**, por lo que no se registran resultados ficticios ni defectos inventados. Las columnas de ejecución y defectos se actualizarán durante E5.
+Los casos CP-01 a CP-32 tienen resultados reales de Fase 1. Esta actualización relaciona sus observaciones y defectos con los requisitos; el estado del registro formal en TestLink se informa en E5.
 
 La matriz permite responder de forma directa:
 
@@ -20,9 +20,9 @@ La matriz permite responder de forma directa:
 ## Estado de ejecución
 
 - **Pendiente:** caso diseñado, aún no ejecutado formalmente.
-- **Aprobado:** ejecución completada y resultado igual al esperado.
-- **Fallido:** ejecución completada y resultado diferente al esperado.
-- **Bloqueado:** no fue posible ejecutar el caso por una dependencia o defecto previo.
+- **Aprobado / Passed:** ejecución completada y resultado igual al esperado.
+- **Fallido / Failed:** ejecución completada y resultado diferente al esperado.
+- **Bloqueado / Blocked:** no fue posible ejecutar el caso por una dependencia o defecto previo.
 
 ## Estado del defecto
 
@@ -42,176 +42,122 @@ La matriz permite responder de forma directa:
 
 # 3. Matriz de trazabilidad de requerimientos funcionales
 
-| Requerimiento | Caso(s) de prueba | Cobertura | Ejecución | Defecto(s) | Estado defecto |
+| Requerimiento | Caso(s) / evidencia | Cobertura | Ejecución | Defecto(s) | Estado defecto |
 |---|---|---|---|---|---|
-| RF-01 | CP-01, CP-02 | Cubierto | Pendiente | — | N/A |
-| RF-02 | CP-03, CP-04 | Cubierto | Pendiente | — | N/A |
-| RF-03 | CP-03, CP-04, CP-05, CP-06, CP-07, CP-08, CP-09, CP-10 | Cubierto | Pendiente | — | N/A |
-| RF-04 | CP-11, CP-12 | Cubierto | Pendiente | — | N/A |
-| RF-05 | CP-13, CP-14 | Cubierto | Pendiente | — | N/A |
-| RF-06 | CP-15 | Cubierto | Pendiente | — | N/A |
-| RF-07 | CP-16, CP-17, CP-18 | Cubierto | Pendiente | — | N/A |
-| RF-08 | CP-16, CP-17, CP-18, CP-19, CP-20, CP-21, CP-22, CP-23, CP-24 | Cubierto | Pendiente | — | N/A |
-| RF-09 | CP-29, CP-30 | Cubierto | Pendiente | — | N/A |
-| RF-10 | CP-25, CP-26, CP-27, CP-28 | Cubierto | Pendiente | — | N/A |
-| RF-11 | CP-31 | Cubierto | Pendiente | — | N/A |
-| RF-12 | CP-32 | Cubierto | Pendiente | — | N/A |
+| RF-01 | CP-01; CP-02 | Cubierto | CP-01=Passed; CP-02=Failed | DEF-01 | DEF-01=Abierto |
+| RF-02 | CP-03; CP-04 | Cubierto | CP-03=Passed; CP-04=Passed | — | N/A |
+| RF-03 | CP-03; CP-04; CP-05; CP-06; CP-07; CP-08; CP-09; CP-10 | Cubierto | CP-03=Passed; CP-04=Passed; CP-05=Passed; CP-06=Passed; CP-07=Passed; CP-08=Passed; CP-09=Passed; CP-10=Passed | — | N/A |
+| RF-04 | CP-11; CP-12 | Cubierto | CP-11=Passed; CP-12=Passed | — | N/A |
+| RF-05 | CP-13; CP-14 | Cubierto | CP-13=Passed; CP-14=Passed | — | N/A |
+| RF-06 | CP-15 | Cubierto | CP-15=Passed | — | N/A |
+| RF-07 | CP-16; CP-17; CP-18 | Cubierto | CP-16=Passed; CP-17=Passed; CP-18=Passed | — | N/A |
+| RF-08 | CP-16; CP-17; CP-18; CP-19; CP-20; CP-21; CP-22; CP-23; CP-24 | Cubierto | CP-16=Passed; CP-17=Passed; CP-18=Passed; CP-19=Passed; CP-20=Passed; CP-21=Passed; CP-22=Passed; CP-23=Passed; CP-24=Passed | — | N/A |
+| RF-09 | CP-29; CP-30 | Cubierto | CP-29=Passed; CP-30=Passed | — | N/A |
+| RF-10 | CP-25; CP-26; CP-27; CP-28 | Cubierto | CP-25=Passed; CP-26=Passed; CP-27=Passed; CP-28=Passed | — | N/A |
+| RF-11 | CP-31 | Cubierto | CP-31=Passed | — | N/A |
+| RF-12 | CP-32 | Cubierto | CP-32=Passed | — | N/A |
 
-**Resultado:** los 12 requerimientos funcionales definidos en E1 poseen al menos un caso de prueba diseñado.
+Los 12 RF tienen cobertura de diseño. Las asociaciones directas proceden de los encabezados de E3; los resultados corresponden a los casos ejecutados, no a una certificación completa del requerimiento. Los defectos exploratorios se enlazan al RF afectado sin cambiar retroactivamente el resultado de los 32 casos.
 
 ---
 
 # 4. Trazabilidad de requerimientos no funcionales
 
-Los RNF también se mantienen en la matriz porque forman parte de E1. Algunos se validan directamente con los casos de E3 y otros requieren evidencia especializada de rendimiento, análisis estático o despliegue.
-
-| Requerimiento | Caso(s) / evidencia asociada | Cobertura actual | Ejecución | Defecto(s) | Estado defecto |
+| Requerimiento | Caso(s) / evidencia | Cobertura | Ejecución | Defecto(s) | Estado defecto |
 |---|---|---|---|---|---|
-| RNF-01 Rendimiento de consultas GET | CP-11, CP-15, CP-32 + prueba de carga k6 en Fase 2 | Cubierto parcialmente | Pendiente | — | N/A |
-| RNF-02 Rendimiento de operaciones de escritura | CP-03, CP-13, CP-16, CP-29 + prueba de carga k6 en Fase 2 | Cubierto parcialmente | Pendiente | — | N/A |
-| RNF-03 Integridad de agenda / doble reserva | CP-22 | Cubierto | Pendiente | — | N/A |
-| RNF-04 Integridad transaccional de consulta | CP-31 | Cubierto | Pendiente | — | N/A |
-| RNF-05 Seguridad básica de autenticación | CP-01, CP-02 | Cubierto | Pendiente | — | N/A |
-| RNF-06 Formato consistente de errores API | CP-02, CP-06, CP-08, CP-10, CP-14, CP-17, CP-18, CP-19, CP-20, CP-21, CP-22, CP-28, CP-30 | Cubierto | Pendiente | — | N/A |
-| RNF-07 Quality gate y mantenibilidad | Evidencia de SonarQube/SonarCloud en Fase 2 | Planificado | Pendiente | — | N/A |
-| RNF-08 Portabilidad y ejecución en entorno limpio | README + instalación limpia + evidencia de despliegue E6 | Planificado | Pendiente | — | N/A |
-| RNF-09 Mensajes de validación visibles en interfaz | CP-02, CP-06, CP-10, CP-17, CP-18, CP-19, CP-20, CP-21, CP-22, CP-28, CP-30 | Cubierto | Pendiente | — | N/A |
-| RNF-10 Inicialización automática de SQLite | Evidencia de arranque sin `clinic.db` | Planificado | Pendiente | — | N/A |
+| RNF-01 | CP-11; CP-15; CP-32; k6 Fase 2 | Cubierto parcialmente | Pendiente Fase 2; no ejecutado | — | N/A |
+| RNF-02 | CP-03; CP-13; CP-16; CP-29; k6 Fase 2 | Cubierto parcialmente | Pendiente Fase 2; no ejecutado | — | N/A |
+| RNF-03 | CP-22 | Cubierto parcialmente | CP-22 Passed; pendiente criterio de 100 intentos | — | N/A |
+| RNF-04 | CP-31 | Cubierto parcialmente | CP-31 Passed; pendiente reversión ante fallo de inserción | — | N/A |
+| RNF-05 | CP-01; CP-02 | Cubierto parcialmente | Evidencia HTTP de CP-01/CP-02; evaluación de seguridad limitada al alcance observado | — | N/A |
+| RNF-06 | CP-02; CP-06; CP-08; CP-10; CP-14; CP-17; CP-18; CP-19; CP-20; CP-21; CP-22; CP-28; CP-30 | Cubierto parcialmente | Formato observado en casos API; ver E5 y exploración, sin garantía para entradas no probadas | — | N/A |
+| RNF-07 | SonarQube/SonarCloud Fase 2 | Planificado | Pendiente Fase 2; no ejecutado | — | N/A |
+| RNF-08 | README; instalación limpia; E6 | Planificado | Pendiente validación especializada de entorno limpio / E6 | — | N/A |
+| RNF-09 | CP-02; CP-06; CP-10; CP-17; CP-18; CP-19; CP-20; CP-21; CP-22; CP-28; CP-30 | Cubierto parcialmente | No conforme en evidencia observada: DEF-01 | DEF-01 | DEF-01=Abierto |
+| RNF-10 | Arranque sin clinic.db | Planificado | Pendiente prueba de arranque sin SQLite | — | N/A |
+
+La aprobación funcional de un CP no acredita mediciones de rendimiento, 100 intentos de conflicto, reversión transaccional, quality gate, instalación limpia ni recuperación. La visibilidad UI solo se acredita mediante observación de interfaz, nunca mediante respuestas HTTP.
 
 ---
 
 # 5. Matriz inversa: caso de prueba → requerimiento
 
-Esta vista facilita identificar rápidamente qué requerimientos resultan afectados cuando un caso falla.
-
-| Caso | Requerimiento(s) |
-|---|---|
-| CP-01 | RF-01, RNF-05 |
-| CP-02 | RF-01, RNF-05, RNF-06, RNF-09 |
-| CP-03 | RF-02, RF-03, RNF-02 |
-| CP-04 | RF-02, RF-03 |
-| CP-05 | RF-03 |
-| CP-06 | RF-03, RNF-06, RNF-09 |
-| CP-07 | RF-03 |
-| CP-08 | RF-03, RNF-06 |
-| CP-09 | RF-03 |
-| CP-10 | RF-03, RNF-06, RNF-09 |
-| CP-11 | RF-04, RNF-01 |
-| CP-12 | RF-04 |
-| CP-13 | RF-05, RNF-02 |
-| CP-14 | RF-05, RNF-06 |
-| CP-15 | RF-06, RNF-01 |
-| CP-16 | RF-07, RF-08, RNF-02 |
-| CP-17 | RF-07, RF-08, RNF-06, RNF-09 |
-| CP-18 | RF-07, RF-08, RNF-06, RNF-09 |
-| CP-19 | RF-08, RNF-06, RNF-09 |
-| CP-20 | RF-08, RNF-06, RNF-09 |
-| CP-21 | RF-08, RNF-06, RNF-09 |
-| CP-22 | RF-08, RNF-03, RNF-06, RNF-09 |
-| CP-23 | RF-08 |
-| CP-24 | RF-08 |
-| CP-25 | RF-10 |
-| CP-26 | RF-10 |
-| CP-27 | RF-10 |
-| CP-28 | RF-10, RNF-06, RNF-09 |
-| CP-29 | RF-09, RNF-02 |
-| CP-30 | RF-09, RNF-06, RNF-09 |
-| CP-31 | RF-11, RNF-04 |
-| CP-32 | RF-12, RNF-01 |
+| Caso | Requerimiento(s) | Resultado E5 | Defecto detectado en el caso |
+|---|---|---|---|
+| CP-01 | RF-01, RNF-05 | Passed | — |
+| CP-02 | RF-01, RNF-05, RNF-06, RNF-09 | Failed | DEF-01 |
+| CP-03 | RF-02, RF-03, RNF-02 | Passed | — |
+| CP-04 | RF-02, RF-03 | Passed | — |
+| CP-05 | RF-03 | Passed | — |
+| CP-06 | RF-03, RNF-06, RNF-09 | Passed | — |
+| CP-07 | RF-03 | Passed | — |
+| CP-08 | RF-03, RNF-06 | Passed | — |
+| CP-09 | RF-03 | Passed | — |
+| CP-10 | RF-03, RNF-06, RNF-09 | Passed | — |
+| CP-11 | RF-04, RNF-01 | Passed | — |
+| CP-12 | RF-04 | Passed | — |
+| CP-13 | RF-05, RNF-02 | Passed | — |
+| CP-14 | RF-05, RNF-06 | Passed | — |
+| CP-15 | RF-06, RNF-01 | Passed | — |
+| CP-16 | RF-07, RF-08, RNF-02 | Passed | — |
+| CP-17 | RF-07, RF-08, RNF-06, RNF-09 | Passed | — |
+| CP-18 | RF-07, RF-08, RNF-06, RNF-09 | Passed | — |
+| CP-19 | RF-08, RNF-06, RNF-09 | Passed | — |
+| CP-20 | RF-08, RNF-06, RNF-09 | Passed | — |
+| CP-21 | RF-08, RNF-06, RNF-09 | Passed | — |
+| CP-22 | RF-08, RNF-03, RNF-06, RNF-09 | Passed | — |
+| CP-23 | RF-08 | Passed | — |
+| CP-24 | RF-08 | Passed | — |
+| CP-25 | RF-10 | Passed | — |
+| CP-26 | RF-10 | Passed | — |
+| CP-27 | RF-10 | Passed | — |
+| CP-28 | RF-10, RNF-06, RNF-09 | Passed | — |
+| CP-29 | RF-09, RNF-02 | Passed | — |
+| CP-30 | RF-09, RNF-06, RNF-09 | Passed | — |
+| CP-31 | RF-11, RNF-04 | Passed | — |
+| CP-32 | RF-12, RNF-01 | Passed | — |
 
 ---
 
-# 6. Estado de cobertura antes de la ejecución
+# 6. Estado de cobertura después de la ejecución
 
-## 6.1 Requerimientos funcionales
+- Requerimientos funcionales: **12**; con al menos un caso diseñado: **12**; sin cobertura de diseño: **0**.
+- Cobertura de diseño funcional: **12 / 12 × 100 = 100 %**.
+- Casos CP-01 a CP-32: **32 resultados registrados**; distribución y denominadores en [E5_METRICAS.md](E5_METRICAS.md).
+- RNF: **10**; la evidencia parcial y las verificaciones pendientes se detallan por separado en la sección 4.
 
-- Total de requerimientos funcionales: **12**
-- Requerimientos funcionales con al menos un caso diseñado: **12**
-- Requerimientos funcionales sin cobertura de diseño: **0**
-- Cobertura de diseño funcional: **100 %**
-
-Cálculo:
-
-```text
-12 requerimientos cubiertos / 12 requerimientos funcionales × 100 = 100 %
-```
-
-## 6.2 Requerimientos no funcionales
-
-- Total de RNF: **10**
-- RNF con evidencia funcional directa diseñada: RNF-03, RNF-04, RNF-05, RNF-06 y RNF-09.
-- RNF con cobertura parcial pendiente de medición especializada: RNF-01 y RNF-02.
-- RNF cuya verificación especializada está planificada: RNF-07, RNF-08 y RNF-10.
-
-Esto no significa que los RNF planificados estén incumplidos; significa que su evidencia todavía no ha sido producida.
+La cobertura de diseño no significa ausencia de defectos ni cumplimiento integral de cada RNF.
 
 ---
 
 # 7. Registro de defectos
 
-No se registran defectos antes de ejecutar los casos. Cuando un caso falle se creará un defecto con el formato:
+| Defecto | Módulo | Requerimientos | Caso(s) vinculado(s) | Estado | Azure DevOps |
+|---|---|---|---|---|---|
+| DEF-01 | Autenticación | RF-01, RNF-09 | CP-02 | Abierto | Pendiente de registrar |
 
-```text
-DEF-XX
-Título:
-Requerimiento afectado:
-Caso que lo detectó:
-Severidad:
-Prioridad:
-Precondiciones:
-Pasos para reproducir:
-Resultado esperado:
-Resultado obtenido:
-Evidencia:
-Estado:
-```
-
-## Ejemplo de trazabilidad cuando exista un defecto
-
-| Requerimiento | Caso | Ejecución | Defecto | Estado |
-|---|---|---|---|---|
-| RF-08 | CP-22 | Fallido | DEF-01 | Abierto |
-
-El ejemplo anterior es únicamente ilustrativo y no representa un defecto real de la aplicación.
+Las fichas reproducibles y su evidencia se conservan en [defects.json](evidencias/fase1/defects.json) y en el informe E5. No se incluyen ejemplos ficticios como defectos reales.
 
 ---
 
-# 8. Plantilla de actualización durante E5
+# 8. Registro y actualización durante E5
 
-Después de cada ejecución deberá actualizarse la fila correspondiente con:
+Cada fila de [E5_RESULTADOS_EJECUCION.csv](E5_RESULTADOS_EJECUCION.csv) conserva código, ID Azure DevOps, requerimiento, resultado, observación real, defecto, módulo, fecha y evidencia. Las fuentes originales no son reemplazadas por el generador.
 
-1. Resultado de ejecución.
-2. Defecto relacionado, si existe.
-3. Estado del defecto.
-4. Evidencia almacenada en la herramienta seleccionada.
-5. Fecha y responsable de la ejecución.
-
-No se considerará un caso aprobado únicamente porque el sistema respondió; el resultado obtenido debe coincidir con todo el resultado esperado definido en E3.
+No se considera un caso aprobado únicamente porque el sistema respondió: la evidencia debe coincidir con su resultado esperado. Un defecto exploratorio conserva su contexto propio y no se contabiliza como un caso E3 adicional.
 
 ---
 
 # 9. Preguntas que responde la matriz
 
-## ¿Qué requerimientos funcionales quedaron sin cobertura de diseño?
+**¿Qué RF quedaron sin cobertura de diseño?** Ninguno: RF-01 a RF-12 poseen al menos un caso.
 
-**Ninguno.** Los requerimientos `RF-01` a `RF-12` están relacionados con uno o más casos de prueba.
+**¿Qué evidencia sigue pendiente?** RNF-01/RNF-02 requieren carga; RNF-07 requiere análisis estático/quality gate; RNF-08 requiere validación de entorno limpio; RNF-10 requiere inicialización sin SQLite. RNF-03/RNF-04 mantienen los límites cuantitativos y transaccionales indicados en la sección 4. Estas verificaciones no se marcan Passed por ejecutar pruebas funcionales.
 
-## ¿Qué requerimientos todavía necesitan evidencia especializada?
-
-- RNF-01 — medición de rendimiento GET con k6.
-- RNF-02 — medición de rendimiento de escritura con k6.
-- RNF-07 — análisis estático y quality gate.
-- RNF-08 — ejecución limpia y despliegue.
-- RNF-10 — recuperación e inicialización automática de SQLite.
-
-## ¿Qué defectos afectan a qué requerimientos?
-
-Todavía no puede responderse con defectos reales porque la ejecución formal no ha comenzado. A partir de E5, cada defecto será enlazado con el caso que lo detectó y, por medio de esta matriz, con el requerimiento correspondiente.
+**¿Qué defectos afectan a cada requerimiento?** Las columnas Defectos y Estado defecto enlazan las observaciones reales de E5; los casos fallidos aparecen individualmente.
 
 ---
 
 # 10. Conclusión
 
-La matriz mantiene trazabilidad desde los requerimientos de E1 hasta los casos de prueba de E3 y deja preparados los campos necesarios para registrar ejecución y defectos en E5.
-
-La cobertura de diseño de los requerimientos funcionales es completa. Los requerimientos no funcionales cuya comprobación depende de pruebas de carga, análisis estático o despliegue permanecen identificados como verificaciones planificadas, evitando presentar como ejecutada evidencia que todavía no existe.
+La matriz conserva trazabilidad desde E1 y E3 hasta los resultados reales de E5 y los defectos documentados. El alcance funcional ejecutado y las verificaciones especializadas pendientes se distinguen explícitamente. La evidencia de ejecución no se sustituye por conteos de diseño ni por capturas no tomadas.
