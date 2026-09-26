@@ -1,0 +1,17 @@
+{
+  "checked_at": "2026-09-25T23:35:35.6722394-06:00",
+  "db_backup": "../fase1-backups/clinic-before-e5-20260925.db",
+  "baseline_commit": "b3e04b711bde319b63e945401cc5cf67d081195d",
+  "backend_url": "http://localhost:5000/api/health",
+  "frontend_http": 200,
+  "node": "v24.19.0",
+  "frontend_url": "http://localhost:5173",
+  "backend": {
+    "data": {
+      "status": "UP"
+    },
+    "ok": true
+  },
+  "npm": "11.17.0",
+  "python": "Python 3.13.9"
+}
