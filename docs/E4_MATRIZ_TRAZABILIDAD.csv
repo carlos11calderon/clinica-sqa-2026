@@ -1,0 +1,23 @@
+Requerimiento,Casos_de_prueba,Cobertura,Ejecucion,Defectos,Estado_defecto
+RF-01,"CP-01; CP-02",Cubierto,Pendiente,,N/A
+RF-02,"CP-03; CP-04",Cubierto,Pendiente,,N/A
+RF-03,"CP-03; CP-04; CP-05; CP-06; CP-07; CP-08; CP-09; CP-10",Cubierto,Pendiente,,N/A
+RF-04,"CP-11; CP-12",Cubierto,Pendiente,,N/A
+RF-05,"CP-13; CP-14",Cubierto,Pendiente,,N/A
+RF-06,"CP-15",Cubierto,Pendiente,,N/A
+RF-07,"CP-16; CP-17; CP-18",Cubierto,Pendiente,,N/A
+RF-08,"CP-16; CP-17; CP-18; CP-19; CP-20; CP-21; CP-22; CP-23; CP-24",Cubierto,Pendiente,,N/A
+RF-09,"CP-29; CP-30",Cubierto,Pendiente,,N/A
+RF-10,"CP-25; CP-26; CP-27; CP-28",Cubierto,Pendiente,,N/A
+RF-11,"CP-31",Cubierto,Pendiente,,N/A
+RF-12,"CP-32",Cubierto,Pendiente,,N/A
+RNF-01,"CP-11; CP-15; CP-32; k6 Fase 2","Cubierto parcialmente",Pendiente,,N/A
+RNF-02,"CP-03; CP-13; CP-16; CP-29; k6 Fase 2","Cubierto parcialmente",Pendiente,,N/A
+RNF-03,"CP-22",Cubierto,Pendiente,,N/A
+RNF-04,"CP-31",Cubierto,Pendiente,,N/A
+RNF-05,"CP-01; CP-02",Cubierto,Pendiente,,N/A
+RNF-06,"CP-02; CP-06; CP-08; CP-10; CP-14; CP-17; CP-18; CP-19; CP-20; CP-21; CP-22; CP-28; CP-30",Cubierto,Pendiente,,N/A
+RNF-07,"SonarQube/SonarCloud Fase 2",Planificado,Pendiente,,N/A
+RNF-08,"README; instalación limpia; E6",Planificado,Pendiente,,N/A
+RNF-09,"CP-02; CP-06; CP-10; CP-17; CP-18; CP-19; CP-20; CP-21; CP-22; CP-28; CP-30",Cubierto,Pendiente,,N/A
+RNF-10,"Arranque sin clinic.db",Planificado,Pendiente,,N/A
