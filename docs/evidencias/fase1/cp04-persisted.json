@@ -1,0 +1,85 @@
+{
+  "data": [
+    {
+      "active": 1,
+      "birth_date": "1990-01-01",
+      "created_at": "2026-09-26 05:35:10",
+      "email": "",
+      "first_name": "AuxiliarAPI",
+      "id": 1,
+      "last_name": "ActivoA",
+      "phone": "55558001"
+    },
+    {
+      "active": 1,
+      "birth_date": "1990-01-01",
+      "created_at": "2026-09-26 05:35:12",
+      "email": "",
+      "first_name": "AuxiliarAPI",
+      "id": 2,
+      "last_name": "ActivoB",
+      "phone": "55558002"
+    },
+    {
+      "active": 0,
+      "birth_date": "1990-01-01",
+      "created_at": "2026-09-26 05:35:14",
+      "email": "",
+      "first_name": "AuxiliarAPI",
+      "id": 3,
+      "last_name": "DesactivarC",
+      "phone": "55558003"
+    },
+    {
+      "active": 1,
+      "birth_date": "1906-09-25",
+      "created_at": "2026-09-26 05:35:30",
+      "email": "",
+      "first_name": "Paciente",
+      "id": 5,
+      "last_name": "Límite",
+      "phone": "55551237"
+    },
+    {
+      "active": 1,
+      "birth_date": "1988-10-20",
+      "created_at": "2026-09-26 05:39:53",
+      "email": "",
+      "first_name": "Ana",
+      "id": 8,
+      "last_name": "López",
+      "phone": "55559876"
+    },
+    {
+      "active": 1,
+      "birth_date": "1995-05-15",
+      "created_at": "2026-09-26 05:39:16",
+      "email": "carlos.prueba@example.com",
+      "first_name": "Carlos",
+      "id": 7,
+      "last_name": "Prueba",
+      "phone": "55551234"
+    },
+    {
+      "active": 1,
+      "birth_date": "2000-01-01",
+      "created_at": "2026-09-26 05:35:18",
+      "email": "",
+      "first_name": "Al",
+      "id": 4,
+      "last_name": "Pérez",
+      "phone": "55551235"
+    },
+    {
+      "active": 1,
+      "birth_date": "1990-01-01",
+      "created_at": "2026-09-26 05:35:42",
+      "email": "",
+      "first_name": "Paciente",
+      "id": 6,
+      "last_name": "TelefonoValidoAPI",
+      "phone": "55551234"
+    }
+  ],
+  "ok": true
+}

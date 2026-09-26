@@ -1,0 +1,15 @@
+{
+  "data": [
+    {
+      "active": 1,
+      "birth_date": "1995-05-15",
+      "created_at": "2026-09-26 05:39:16",
+      "email": "carlos.prueba@example.com",
+      "first_name": "Carlos",
+      "id": 7,
+      "last_name": "Prueba",
+      "phone": "55551234"
+    }
+  ],
+  "ok": true
+}

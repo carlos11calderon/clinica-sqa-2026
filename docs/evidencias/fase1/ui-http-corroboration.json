@@ -1,0 +1,529 @@
+{
+  "run_id": "E5-UI-HTTP-20260925T234122-0600",
+  "server": "http://localhost:5000/api",
+  "scope": "Segunda ejecución API complementaria, no acredita UI. No contiene estados formales de TestLink.",
+  "formal_case_results": false,
+  "reference_date": "2026-09-25",
+  "doctor_id": 3,
+  "cases": [
+    {
+      "case_id": "CP-03",
+      "started_at": "2026-09-25T23:41:28.811153-06:00",
+      "finished_at": "2026-09-25T23:41:32.894751-06:00",
+      "channel": "HTTP real complementario; SQLite solo lectura donde corresponda",
+      "formal_result": null,
+      "ui_verified": false,
+      "checks": [
+        {
+          "check": "HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 9
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "UI-HTTP-004"
+          ]
+        },
+        {
+          "check": "Registro activo y datos exactos persistidos",
+          "passed": true,
+          "expected": {
+            "first_name": "Carlos",
+            "last_name": "PruebaHTTP",
+            "birth_date": "1995-05-15",
+            "phone": "55551234",
+            "email": "carlos.pruebahttp@example.com",
+            "active": 1
+          },
+          "actual": {
+            "active": 1,
+            "birth_date": "1995-05-15",
+            "created_at": "2026-09-26 05:41:30",
+            "email": "carlos.pruebahttp@example.com",
+            "first_name": "Carlos",
+            "id": 9,
+            "last_name": "PruebaHTTP",
+            "phone": "55551234"
+          },
+          "evidence": [
+            "UI-HTTP-004",
+            "UI-HTTP-005"
+          ]
+        }
+      ],
+      "data": {
+        "patient_id": 9
+      },
+      "http_evidence": [
+        "UI-HTTP-004",
+        "UI-HTTP-005"
+      ],
+      "error": null
+    },
+    {
+      "case_id": "CP-04",
+      "started_at": "2026-09-25T23:41:32.895043-06:00",
+      "finished_at": "2026-09-25T23:41:37.015162-06:00",
+      "channel": "HTTP real complementario; SQLite solo lectura donde corresponda",
+      "formal_result": null,
+      "ui_verified": false,
+      "checks": [
+        {
+          "check": "HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 10
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "UI-HTTP-006"
+          ]
+        },
+        {
+          "check": "Registro activo y datos exactos persistidos",
+          "passed": true,
+          "expected": {
+            "first_name": "Ana",
+            "last_name": "LópezHTTP",
+            "birth_date": "1988-10-20",
+            "phone": "55559876",
+            "email": "",
+            "active": 1
+          },
+          "actual": {
+            "active": 1,
+            "birth_date": "1988-10-20",
+            "created_at": "2026-09-26 05:41:34",
+            "email": "",
+            "first_name": "Ana",
+            "id": 10,
+            "last_name": "LópezHTTP",
+            "phone": "55559876"
+          },
+          "evidence": [
+            "UI-HTTP-006",
+            "UI-HTTP-007"
+          ]
+        }
+      ],
+      "data": {
+        "patient_id": 10
+      },
+      "http_evidence": [
+        "UI-HTTP-006",
+        "UI-HTTP-007"
+      ],
+      "error": null
+    },
+    {
+      "case_id": "CP-11",
+      "started_at": "2026-09-25T23:41:37.015454-06:00",
+      "finished_at": "2026-09-25T23:41:39.058545-06:00",
+      "channel": "HTTP real complementario; SQLite solo lectura donde corresponda",
+      "formal_result": null,
+      "ui_verified": false,
+      "checks": [
+        {
+          "check": "HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 200,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 200,
+            "body": {
+              "data": [
+                {
+                  "active": 1,
+                  "birth_date": "1995-05-15",
+                  "created_at": "2026-09-26 05:39:16",
+                  "email": "carlos.prueba@example.com",
+                  "first_name": "Carlos",
+                  "id": 7,
+                  "last_name": "Prueba",
+                  "phone": "55551234"
+                },
+                {
+                  "active": 1,
+                  "birth_date": "1995-05-15",
+                  "created_at": "2026-09-26 05:41:30",
+                  "email": "carlos.pruebahttp@example.com",
+                  "first_name": "Carlos",
+                  "id": 9,
+                  "last_name": "PruebaHTTP",
+                  "phone": "55551234"
+                }
+              ],
+              "ok": true
+            }
+          },
+          "evidence": [
+            "UI-HTTP-008"
+          ]
+        },
+        {
+          "check": "Colección contiene paciente de apellido coincidente",
+          "passed": true,
+          "expected": {
+            "patient_id": 9,
+            "last_name_contains": "Prueba"
+          },
+          "actual": [
+            {
+              "active": 1,
+              "birth_date": "1995-05-15",
+              "created_at": "2026-09-26 05:39:16",
+              "email": "carlos.prueba@example.com",
+              "first_name": "Carlos",
+              "id": 7,
+              "last_name": "Prueba",
+              "phone": "55551234"
+            },
+            {
+              "active": 1,
+              "birth_date": "1995-05-15",
+              "created_at": "2026-09-26 05:41:30",
+              "email": "carlos.pruebahttp@example.com",
+              "first_name": "Carlos",
+              "id": 9,
+              "last_name": "PruebaHTTP",
+              "phone": "55551234"
+            }
+          ],
+          "evidence": [
+            "UI-HTTP-008"
+          ]
+        }
+      ],
+      "data": {},
+      "http_evidence": [
+        "UI-HTTP-008"
+      ],
+      "error": null
+    },
+    {
+      "case_id": "CP-12",
+      "started_at": "2026-09-25T23:41:39.058843-06:00",
+      "finished_at": "2026-09-25T23:41:41.104828-06:00",
+      "channel": "HTTP real complementario; SQLite solo lectura donde corresponda",
+      "formal_result": null,
+      "ui_verified": false,
+      "checks": [
+        {
+          "check": "HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 200,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 200,
+            "body": {
+              "data": [],
+              "ok": true
+            }
+          },
+          "evidence": [
+            "UI-HTTP-009"
+          ]
+        },
+        {
+          "check": "Colección vacía",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "UI-HTTP-009"
+          ]
+        }
+      ],
+      "data": {},
+      "http_evidence": [
+        "UI-HTTP-009"
+      ],
+      "error": null
+    },
+    {
+      "case_id": "CP-16",
+      "started_at": "2026-09-25T23:41:41.105095-06:00",
+      "finished_at": "2026-09-25T23:41:45.183299-06:00",
+      "channel": "HTTP real complementario; SQLite solo lectura donde corresponda",
+      "formal_result": null,
+      "ui_verified": false,
+      "checks": [
+        {
+          "check": "HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 10
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "UI-HTTP-010"
+          ]
+        },
+        {
+          "check": "Cita PROGRAMADA y datos exactos persistidos",
+          "passed": true,
+          "expected": {
+            "patient_id": 9,
+            "doctor_id": 3,
+            "appointment_date": "2026-09-28",
+            "appointment_time": "09:00",
+            "reason": "Control general",
+            "status": "PROGRAMADA"
+          },
+          "actual": {
+            "appointment_date": "2026-09-28",
+            "appointment_time": "09:00",
+            "created_at": "2026-09-26 05:41:43",
+            "doctor_id": 3,
+            "doctor_name": "Dra. Sofía Morales",
+            "id": 10,
+            "patient_id": 9,
+            "patient_name": "Carlos PruebaHTTP",
+            "reason": "Control general",
+            "specialty": "Medicina Interna",
+            "status": "PROGRAMADA"
+          },
+          "evidence": [
+            "UI-HTTP-010",
+            "UI-HTTP-011"
+          ]
+        }
+      ],
+      "data": {
+        "appointment_id": 10
+      },
+      "http_evidence": [
+        "UI-HTTP-010",
+        "UI-HTTP-011"
+      ],
+      "error": null
+    },
+    {
+      "case_id": "CP-29",
+      "started_at": "2026-09-25T23:41:45.183585-06:00",
+      "finished_at": "2026-09-25T23:41:53.379372-06:00",
+      "channel": "HTTP real complementario; SQLite solo lectura donde corresponda",
+      "formal_result": null,
+      "ui_verified": false,
+      "checks": [
+        {
+          "check": "Precondición PROGRAMADA",
+          "passed": true,
+          "expected": "PROGRAMADA",
+          "actual": "PROGRAMADA",
+          "evidence": [
+            "UI-HTTP-013"
+          ]
+        },
+        {
+          "check": "HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 200,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 200,
+            "body": {
+              "data": {
+                "id": 11
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "UI-HTTP-014"
+          ]
+        },
+        {
+          "check": "Nueva fecha y hora; estado PROGRAMADA",
+          "passed": true,
+          "expected": {
+            "appointment_date": "2026-09-29",
+            "appointment_time": "14:00",
+            "status": "PROGRAMADA"
+          },
+          "actual": {
+            "appointment_date": "2026-09-29",
+            "appointment_time": "14:00",
+            "created_at": "2026-09-26 05:41:47",
+            "doctor_id": 3,
+            "doctor_name": "Dra. Sofía Morales",
+            "id": 11,
+            "patient_id": 9,
+            "patient_name": "Carlos PruebaHTTP",
+            "reason": "Auxiliar HTTP CP29",
+            "specialty": "Medicina Interna",
+            "status": "PROGRAMADA"
+          },
+          "evidence": [
+            "UI-HTTP-014",
+            "UI-HTTP-015"
+          ]
+        }
+      ],
+      "data": {
+        "appointment_id": 11
+      },
+      "http_evidence": [
+        "UI-HTTP-012",
+        "UI-HTTP-013",
+        "UI-HTTP-014",
+        "UI-HTTP-015"
+      ],
+      "error": null
+    },
+    {
+      "case_id": "CP-31",
+      "started_at": "2026-09-25T23:41:53.379743-06:00",
+      "finished_at": "2026-09-25T23:42:03.621648-06:00",
+      "channel": "HTTP real complementario; SQLite solo lectura donde corresponda",
+      "formal_result": null,
+      "ui_verified": false,
+      "checks": [
+        {
+          "check": "Precondición CONFIRMADA sin consulta previa",
+          "passed": true,
+          "expected": {
+            "status": "CONFIRMADA",
+            "consultations": []
+          },
+          "actual": {
+            "status": "CONFIRMADA",
+            "consultations": []
+          },
+          "evidence": [
+            "UI-HTTP-018",
+            "data.sqlite_before"
+          ]
+        },
+        {
+          "check": "HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 1
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "UI-HTTP-019"
+          ]
+        },
+        {
+          "check": "Cita persistida ATENDIDA",
+          "passed": true,
+          "expected": "ATENDIDA",
+          "actual": "ATENDIDA",
+          "evidence": [
+            "UI-HTTP-019",
+            "UI-HTTP-020"
+          ]
+        },
+        {
+          "check": "Exactamente una consulta con ID y datos enviados",
+          "passed": true,
+          "expected": {
+            "count": 1,
+            "id": 1,
+            "appointment_id": 12,
+            "diagnosis": "Infección respiratoria leve",
+            "treatment": "Reposo e hidratación",
+            "notes": "Control en siete días"
+          },
+          "actual": [
+            {
+              "id": 1,
+              "appointment_id": 12,
+              "diagnosis": "Infección respiratoria leve",
+              "treatment": "Reposo e hidratación",
+              "notes": "Control en siete días",
+              "created_at": "2026-09-26 05:42:01"
+            }
+          ],
+          "evidence": [
+            "UI-HTTP-019",
+            "data.sqlite_after"
+          ]
+        }
+      ],
+      "data": {
+        "appointment_id": 12,
+        "sqlite_before": {
+          "mode": "read-only",
+          "appointment_id": 12,
+          "consultations": [],
+          "timestamp": "2026-09-25T23:41:59.517107-06:00"
+        },
+        "consultation_id": 1,
+        "sqlite_after": {
+          "mode": "read-only",
+          "appointment_id": 12,
+          "consultations": [
+            {
+              "id": 1,
+              "appointment_id": 12,
+              "diagnosis": "Infección respiratoria leve",
+              "treatment": "Reposo e hidratación",
+              "notes": "Control en siete días",
+              "created_at": "2026-09-26 05:42:01"
+            }
+          ],
+          "timestamp": "2026-09-25T23:42:03.621619-06:00"
+        }
+      },
+      "http_evidence": [
+        "UI-HTTP-016",
+        "UI-HTTP-017",
+        "UI-HTTP-018",
+        "UI-HTTP-019",
+        "UI-HTTP-020"
+      ],
+      "error": null
+    }
+  ],
+  "summary": {
+    "cases": 7,
+    "checks_passed": 17,
+    "checks_failed": 0
+  }
+}

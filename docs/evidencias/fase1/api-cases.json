@@ -1,0 +1,1936 @@
+{
+  "run_id": "E5-API-20260925T233502-0600",
+  "server": "http://localhost:5000/api",
+  "reference_date": "2026-09-25",
+  "next_monday": "2026-09-28",
+  "next_saturday": "2026-09-26",
+  "scope": "22 casos E3 ejecutados con solicitudes HTTP reales en Fase 1. Sin resultados UI inferidos.",
+  "backup": "E:\\Universidad\\Calidad de software\\fase1-backups\\clinic-before-e5-20260925.db",
+  "summary": {
+    "Aprobado": 22,
+    "Fallido": 0,
+    "Bloqueado": 0
+  },
+  "cases": [
+    {
+      "case_id": "CP-05",
+      "title": "CP-05 - Nombre con longitud mínima válida",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:35:14.337224-06:00",
+      "finished_at": "2026-09-25T23:35:20.468725-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 2,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Registrar un paciente utilizando el nombre Al de 2 caracteres.",
+          "expected": "El nombre cumple la longitud mínima permitida."
+        },
+        {
+          "number": "2",
+          "action": "Enviar la solicitud.",
+          "expected": "HTTP 201 y el paciente se registra correctamente."
+        }
+      ],
+      "data": {
+        "payload": {
+          "first_name": "Al",
+          "last_name": "Pérez",
+          "birth_date": "2000-01-01",
+          "phone": "55551235",
+          "email": ""
+        },
+        "patient_id": 4
+      },
+      "checks": [
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 4
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-008"
+          ]
+        },
+        {
+          "check": "Paciente persistido con los valores enviados y activo",
+          "passed": true,
+          "expected": {
+            "first_name": "Al",
+            "last_name": "Pérez",
+            "birth_date": "2000-01-01",
+            "phone": "55551235",
+            "email": "",
+            "active": 1
+          },
+          "actual": {
+            "active": 1,
+            "birth_date": "2000-01-01",
+            "created_at": "2026-09-26 05:35:18",
+            "email": "",
+            "first_name": "Al",
+            "id": 4,
+            "last_name": "Pérez",
+            "phone": "55551235"
+          },
+          "evidence": [
+            "HTTP-008",
+            "HTTP-009"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-007",
+        "HTTP-008",
+        "HTTP-009"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-06",
+      "title": "CP-06 - Nombre por debajo de longitud mínima",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:35:20.469113-06:00",
+      "finished_at": "2026-09-25T23:35:26.580292-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 2,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Ingresar un nombre de 1 carácter y completar el resto de datos válidos.",
+          "expected": "La solicitud queda preparada con un valor por debajo del límite."
+        },
+        {
+          "number": "2",
+          "action": "Enviar la solicitud.",
+          "expected": "El registro es rechazado, ok=false y no se crea el paciente."
+        }
+      ],
+      "data": {
+        "payload": {
+          "first_name": "A",
+          "last_name": "Pérez",
+          "birth_date": "2000-01-01",
+          "phone": "55551236",
+          "email": ""
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Nombres es obligatorio"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Nombres es obligatorio",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-011"
+          ]
+        },
+        {
+          "check": "No se creó paciente con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-010",
+            "HTTP-011",
+            "HTTP-012"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-010",
+        "HTTP-011",
+        "HTTP-012"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-07",
+      "title": "CP-07 - Edad exactamente en límite máximo",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:35:26.580641-06:00",
+      "finished_at": "2026-09-25T23:35:32.737959-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 2,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Calcular una fecha de nacimiento que produzca exactamente 120 años.",
+          "expected": "La fecha representa el límite máximo válido."
+        },
+        {
+          "number": "2",
+          "action": "Registrar el paciente con esa fecha.",
+          "expected": "La fecha es aceptada y el paciente se registra correctamente."
+        }
+      ],
+      "data": {
+        "payload": {
+          "first_name": "Paciente",
+          "last_name": "Límite",
+          "birth_date": "1906-09-25",
+          "phone": "55551237",
+          "email": ""
+        },
+        "patient_id": 5
+      },
+      "checks": [
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 5
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-014"
+          ]
+        },
+        {
+          "check": "Paciente persistido con los valores enviados y activo",
+          "passed": true,
+          "expected": {
+            "first_name": "Paciente",
+            "last_name": "Límite",
+            "birth_date": "1906-09-25",
+            "phone": "55551237",
+            "email": "",
+            "active": 1
+          },
+          "actual": {
+            "active": 1,
+            "birth_date": "1906-09-25",
+            "created_at": "2026-09-26 05:35:30",
+            "email": "",
+            "first_name": "Paciente",
+            "id": 5,
+            "last_name": "Límite",
+            "phone": "55551237"
+          },
+          "evidence": [
+            "HTTP-014",
+            "HTTP-015"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-013",
+        "HTTP-014",
+        "HTTP-015"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-08",
+      "title": "CP-08 - Edad superior al máximo",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:35:32.738306-06:00",
+      "finished_at": "2026-09-25T23:35:38.884291-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 2,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Ingresar una fecha de nacimiento que produzca 121 años.",
+          "expected": "La solicitud queda preparada con un valor superior al límite."
+        },
+        {
+          "number": "2",
+          "action": "Enviar la solicitud.",
+          "expected": "El registro es rechazado con La edad no puede ser mayor a 120 años."
+        }
+      ],
+      "data": {
+        "payload": {
+          "first_name": "Paciente",
+          "last_name": "FueraLímite",
+          "birth_date": "1905-09-25",
+          "phone": "55551238",
+          "email": ""
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "La edad no puede ser mayor a 120 años"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "La edad no puede ser mayor a 120 años",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-017"
+          ]
+        },
+        {
+          "check": "No se creó paciente con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-016",
+            "HTTP-017",
+            "HTTP-018"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-016",
+        "HTTP-017",
+        "HTTP-018"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-09",
+      "title": "CP-09 - Teléfono con longitud mínima válida",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:35:38.884663-06:00",
+      "finished_at": "2026-09-25T23:35:45.007244-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 2,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Ingresar un teléfono de 8 caracteres y completar el resto de datos válidos.",
+          "expected": "El teléfono cumple la longitud mínima permitida."
+        },
+        {
+          "number": "2",
+          "action": "Registrar el paciente.",
+          "expected": "El teléfono es aceptado y el paciente se registra correctamente."
+        }
+      ],
+      "data": {
+        "payload": {
+          "first_name": "Paciente",
+          "last_name": "TelefonoValidoAPI",
+          "birth_date": "1990-01-01",
+          "phone": "55551234",
+          "email": ""
+        },
+        "patient_id": 6
+      },
+      "checks": [
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 6
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-020"
+          ]
+        },
+        {
+          "check": "Paciente persistido con los valores enviados y activo",
+          "passed": true,
+          "expected": {
+            "first_name": "Paciente",
+            "last_name": "TelefonoValidoAPI",
+            "birth_date": "1990-01-01",
+            "phone": "55551234",
+            "email": "",
+            "active": 1
+          },
+          "actual": {
+            "active": 1,
+            "birth_date": "1990-01-01",
+            "created_at": "2026-09-26 05:35:42",
+            "email": "",
+            "first_name": "Paciente",
+            "id": 6,
+            "last_name": "TelefonoValidoAPI",
+            "phone": "55551234"
+          },
+          "evidence": [
+            "HTTP-020",
+            "HTTP-021"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-019",
+        "HTTP-020",
+        "HTTP-021"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-10",
+      "title": "CP-10 - Teléfono por debajo de longitud mínima",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:35:45.007619-06:00",
+      "finished_at": "2026-09-25T23:35:51.168639-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 2,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Ingresar un teléfono de 7 caracteres y completar el resto de datos válidos.",
+          "expected": "La solicitud queda preparada con un valor inferior al límite."
+        },
+        {
+          "number": "2",
+          "action": "Registrar el paciente.",
+          "expected": "El registro es rechazado con Teléfono inválido."
+        }
+      ],
+      "data": {
+        "payload": {
+          "first_name": "Paciente",
+          "last_name": "TelefonoInvalidoAPI",
+          "birth_date": "1990-01-01",
+          "phone": "5551234",
+          "email": ""
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Teléfono inválido"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Teléfono inválido",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-023"
+          ]
+        },
+        {
+          "check": "No se creó paciente con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-022",
+            "HTTP-023",
+            "HTTP-024"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-022",
+        "HTTP-023",
+        "HTTP-024"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-13",
+      "title": "CP-13 - Desactivar paciente existente",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:35:51.169054-06:00",
+      "finished_at": "2026-09-25T23:35:57.324155-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar un paciente activo.",
+          "expected": "El paciente queda seleccionado para actualización."
+        },
+        {
+          "number": "2",
+          "action": "Actualizar el paciente enviando active = 0.",
+          "expected": "HTTP 200 y la actualización es aceptada."
+        },
+        {
+          "number": "3",
+          "action": "Consultar nuevamente el paciente.",
+          "expected": "El paciente queda inactivo."
+        }
+      ],
+      "data": {
+        "patient_id": 3
+      },
+      "checks": [
+        {
+          "check": "Paciente seleccionado activo",
+          "passed": true,
+          "expected": 1,
+          "actual": 1,
+          "evidence": [
+            "HTTP-025"
+          ]
+        },
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 200,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 200,
+            "body": {
+              "data": {
+                "id": 3
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-026"
+          ]
+        },
+        {
+          "check": "Paciente persistido inactivo",
+          "passed": true,
+          "expected": 0,
+          "actual": 0,
+          "evidence": [
+            "HTTP-026",
+            "HTTP-027"
+          ]
+        },
+        {
+          "check": "Demás datos preservados",
+          "passed": true,
+          "expected": {
+            "birth_date": "1990-01-01",
+            "created_at": "2026-09-26 05:35:14",
+            "email": "",
+            "first_name": "AuxiliarAPI",
+            "id": 3,
+            "last_name": "DesactivarC",
+            "phone": "55558003"
+          },
+          "actual": {
+            "birth_date": "1990-01-01",
+            "created_at": "2026-09-26 05:35:14",
+            "email": "",
+            "first_name": "AuxiliarAPI",
+            "id": 3,
+            "last_name": "DesactivarC",
+            "phone": "55558003"
+          },
+          "evidence": [
+            "HTTP-025",
+            "HTTP-027"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-025",
+        "HTTP-026",
+        "HTTP-027"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-14",
+      "title": "CP-14 - Actualizar paciente con estado inválido",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:35:57.324595-06:00",
+      "finished_at": "2026-09-25T23:36:03.469400-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar un paciente existente.",
+          "expected": "El paciente queda disponible para actualización."
+        },
+        {
+          "number": "2",
+          "action": "Enviar una actualización con active = 2.",
+          "expected": "La actualización es rechazada con Estado de paciente inválido."
+        },
+        {
+          "number": "3",
+          "action": "Consultar nuevamente el paciente.",
+          "expected": "El estado anterior se conserva."
+        }
+      ],
+      "data": {
+        "patient_id": 3
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Estado de paciente inválido"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Estado de paciente inválido",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-029"
+          ]
+        },
+        {
+          "check": "Estado y registro originales preservados",
+          "passed": true,
+          "expected": {
+            "active": 0,
+            "birth_date": "1990-01-01",
+            "created_at": "2026-09-26 05:35:14",
+            "email": "",
+            "first_name": "AuxiliarAPI",
+            "id": 3,
+            "last_name": "DesactivarC",
+            "phone": "55558003"
+          },
+          "actual": {
+            "active": 0,
+            "birth_date": "1990-01-01",
+            "created_at": "2026-09-26 05:35:14",
+            "email": "",
+            "first_name": "AuxiliarAPI",
+            "id": 3,
+            "last_name": "DesactivarC",
+            "phone": "55558003"
+          },
+          "evidence": [
+            "HTTP-028",
+            "HTTP-029",
+            "HTTP-030"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-028",
+        "HTTP-029",
+        "HTTP-030"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-15",
+      "title": "CP-15 - Consultar catálogo de médicos",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:03.469855-06:00",
+      "finished_at": "2026-09-25T23:36:05.517440-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 2,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Solicitar GET /api/doctors.",
+          "expected": "El backend procesa la consulta del catálogo."
+        },
+        {
+          "number": "2",
+          "action": "Revisar la respuesta.",
+          "expected": "HTTP 200 y se devuelve una colección de médicos con identificador, nombre y especialidad."
+        }
+      ],
+      "data": {},
+      "checks": [
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 200,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 200,
+            "body": {
+              "data": [
+                {
+                  "id": 2,
+                  "name": "Dr. Luis Pérez",
+                  "specialty": "Pediatría"
+                },
+                {
+                  "id": 1,
+                  "name": "Dra. Ana López",
+                  "specialty": "Medicina General"
+                },
+                {
+                  "id": 3,
+                  "name": "Dra. Sofía Morales",
+                  "specialty": "Medicina Interna"
+                }
+              ],
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-031"
+          ]
+        },
+        {
+          "check": "Colección de médicos con ID nombre especialidad",
+          "passed": true,
+          "expected": "Al menos 3 médicos semilla con id, name y specialty",
+          "actual": [
+            {
+              "id": 2,
+              "name": "Dr. Luis Pérez",
+              "specialty": "Pediatría"
+            },
+            {
+              "id": 1,
+              "name": "Dra. Ana López",
+              "specialty": "Medicina General"
+            },
+            {
+              "id": 3,
+              "name": "Dra. Sofía Morales",
+              "specialty": "Medicina Interna"
+            }
+          ],
+          "evidence": [
+            "HTTP-031"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-031"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-17",
+      "title": "CP-17 - Rechazar cita para paciente inactivo",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:05.518016-06:00",
+      "finished_at": "2026-09-25T23:36:11.628538-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar un paciente con active = 0.",
+          "expected": "El paciente inactivo queda seleccionado."
+        },
+        {
+          "number": "2",
+          "action": "Ingresar médico existente, fecha hábil, hora 09:30 y motivo Consulta.",
+          "expected": "Los demás datos son válidos."
+        },
+        {
+          "number": "3",
+          "action": "Enviar la solicitud.",
+          "expected": "La solicitud es rechazada con Paciente inactivo y no se crea la cita."
+        }
+      ],
+      "data": {
+        "payload": {
+          "patient_id": 3,
+          "doctor_id": 2,
+          "appointment_date": "2026-09-28",
+          "appointment_time": "09:30",
+          "reason": "Consulta"
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Paciente inactivo"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Paciente inactivo",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-033"
+          ]
+        },
+        {
+          "check": "No se creó cita con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-032",
+            "HTTP-033",
+            "HTTP-034"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-032",
+        "HTTP-033",
+        "HTTP-034"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-18",
+      "title": "CP-18 - Rechazar cita con médico inexistente",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:11.629231-06:00",
+      "finished_at": "2026-09-25T23:36:17.762071-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar un paciente activo.",
+          "expected": "El paciente queda seleccionado."
+        },
+        {
+          "number": "2",
+          "action": "Ingresar doctor_id = 999999, fecha hábil, hora 10:00 y motivo Consulta.",
+          "expected": "La solicitud contiene un médico inexistente."
+        },
+        {
+          "number": "3",
+          "action": "Enviar la programación.",
+          "expected": "La solicitud es rechazada con Médico no existe y no se crea la cita."
+        }
+      ],
+      "data": {
+        "payload": {
+          "patient_id": 1,
+          "doctor_id": 999999,
+          "appointment_date": "2026-09-28",
+          "appointment_time": "10:00",
+          "reason": "Consulta"
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Médico no existe"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Médico no existe",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-036"
+          ]
+        },
+        {
+          "check": "No se creó cita con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-035",
+            "HTTP-036",
+            "HTTP-037"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-035",
+        "HTTP-036",
+        "HTTP-037"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-19",
+      "title": "CP-19 - Rechazar cita en fin de semana",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:17.762558-06:00",
+      "finished_at": "2026-09-25T23:36:23.907423-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar un paciente activo y un médico existente.",
+          "expected": "Paciente y médico quedan seleccionados."
+        },
+        {
+          "number": "2",
+          "action": "Ingresar como fecha el próximo sábado y hora 10:00.",
+          "expected": "La fecha corresponde a fin de semana."
+        },
+        {
+          "number": "3",
+          "action": "Intentar programar la cita.",
+          "expected": "La cita es rechazada indicando que solo se programa de lunes a viernes."
+        }
+      ],
+      "data": {
+        "payload": {
+          "patient_id": 1,
+          "doctor_id": 2,
+          "appointment_date": "2026-09-26",
+          "appointment_time": "10:00",
+          "reason": "Consulta sábado"
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Las citas solo se programan de lunes a viernes"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Las citas solo se programan de lunes a viernes",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-039"
+          ]
+        },
+        {
+          "check": "No se creó cita con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-038",
+            "HTTP-039",
+            "HTTP-040"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-038",
+        "HTTP-039",
+        "HTTP-040"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-20",
+      "title": "CP-20 - Rechazar cita fuera del horario",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:23.908118-06:00",
+      "finished_at": "2026-09-25T23:36:30.049919-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar paciente activo, médico existente y día hábil futuro.",
+          "expected": "Las precondiciones válidas quedan preparadas."
+        },
+        {
+          "number": "2",
+          "action": "Ingresar hora 07:30.",
+          "expected": "La hora está fuera del rango permitido."
+        },
+        {
+          "number": "3",
+          "action": "Intentar crear la cita.",
+          "expected": "La cita es rechazada con Horario permitido: 08:00 a 16:30."
+        }
+      ],
+      "data": {
+        "payload": {
+          "patient_id": 1,
+          "doctor_id": 2,
+          "appointment_date": "2026-09-28",
+          "appointment_time": "07:30",
+          "reason": "Consulta"
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Horario permitido: 08:00 a 16:30"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Horario permitido: 08:00 a 16:30",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-042"
+          ]
+        },
+        {
+          "check": "No se creó cita con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-041",
+            "HTTP-042",
+            "HTTP-043"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-041",
+        "HTTP-042",
+        "HTTP-043"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-21",
+      "title": "CP-21 - Rechazar cita fuera de intervalos de 30 minutos",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:30.050437-06:00",
+      "finished_at": "2026-09-25T23:36:36.192173-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar paciente activo, médico existente y día hábil futuro.",
+          "expected": "Las precondiciones válidas quedan preparadas."
+        },
+        {
+          "number": "2",
+          "action": "Ingresar hora 09:15.",
+          "expected": "La hora no coincide con un intervalo de 30 minutos."
+        },
+        {
+          "number": "3",
+          "action": "Intentar programar la cita.",
+          "expected": "La cita es rechazada indicando que debe iniciar cada 30 minutos."
+        }
+      ],
+      "data": {
+        "payload": {
+          "patient_id": 1,
+          "doctor_id": 2,
+          "appointment_date": "2026-09-28",
+          "appointment_time": "09:15",
+          "reason": "Consulta"
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Las citas deben iniciar cada 30 minutos"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Las citas deben iniciar cada 30 minutos",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-045"
+          ]
+        },
+        {
+          "check": "No se creó cita con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-044",
+            "HTTP-045",
+            "HTTP-046"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-044",
+        "HTTP-045",
+        "HTTP-046"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-22",
+      "title": "CP-22 - Rechazar doble reserva del mismo médico",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:36.192782-06:00",
+      "finished_at": "2026-09-25T23:36:46.449525-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Crear o identificar una cita existente del médico a las 11:00.",
+          "expected": "Existe una cita no cancelada que ocupa el horario."
+        },
+        {
+          "number": "2",
+          "action": "Intentar registrar una segunda cita para otro paciente con el mismo médico, fecha y hora.",
+          "expected": "La segunda cita es rechazada con El médico ya tiene una cita en ese horario."
+        },
+        {
+          "number": "3",
+          "action": "Consultar la agenda.",
+          "expected": "Solo existe una cita no cancelada para ese médico, fecha y hora."
+        }
+      ],
+      "data": {
+        "appointment_id": 1,
+        "payload": {
+          "patient_id": 2,
+          "doctor_id": 2,
+          "appointment_date": "2026-09-28",
+          "appointment_time": "11:00",
+          "reason": "Consulta"
+        }
+      },
+      "checks": [
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "El médico ya tiene una cita en ese horario"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "El médico ya tiene una cita en ese horario",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-049"
+          ]
+        },
+        {
+          "check": "No se creó cita con los datos rechazados",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "evidence": [
+            "HTTP-048",
+            "HTTP-049",
+            "HTTP-050"
+          ]
+        },
+        {
+          "check": "Solo una cita no cancelada ocupa el horario",
+          "passed": true,
+          "expected": {
+            "count": 1,
+            "appointment_id": 1
+          },
+          "actual": [
+            {
+              "appointment_date": "2026-09-28",
+              "appointment_time": "11:00",
+              "created_at": "2026-09-26 05:36:38",
+              "doctor_id": 2,
+              "doctor_name": "Dr. Luis Pérez",
+              "id": 1,
+              "patient_id": 1,
+              "patient_name": "AuxiliarAPI ActivoA",
+              "reason": "Auxiliar CP-22 E5-API-20260925T233502-0600",
+              "specialty": "Pediatría",
+              "status": "PROGRAMADA"
+            }
+          ],
+          "evidence": [
+            "HTTP-051"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-047",
+        "HTTP-048",
+        "HTTP-049",
+        "HTTP-050",
+        "HTTP-051"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-23",
+      "title": "CP-23 - Hora de apertura en límite inferior",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:46.450193-06:00",
+      "finished_at": "2026-09-25T23:36:50.535389-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar paciente activo, médico disponible y día hábil futuro.",
+          "expected": "Las precondiciones quedan preparadas."
+        },
+        {
+          "number": "2",
+          "action": "Programar una cita a las 08:00.",
+          "expected": "La hora coincide con el límite inferior permitido."
+        },
+        {
+          "number": "3",
+          "action": "Enviar la solicitud.",
+          "expected": "La cita se registra correctamente."
+        }
+      ],
+      "data": {
+        "payload": {
+          "patient_id": 1,
+          "doctor_id": 2,
+          "appointment_date": "2026-09-28",
+          "appointment_time": "08:00",
+          "reason": "Consulta"
+        },
+        "appointment_id": 2
+      },
+      "checks": [
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 2
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-052"
+          ]
+        },
+        {
+          "check": "Cita persistida PROGRAMADA con horario límite",
+          "passed": true,
+          "expected": {
+            "patient_id": 1,
+            "doctor_id": 2,
+            "appointment_date": "2026-09-28",
+            "appointment_time": "08:00",
+            "reason": "Consulta",
+            "status": "PROGRAMADA"
+          },
+          "actual": {
+            "appointment_date": "2026-09-28",
+            "appointment_time": "08:00",
+            "created_at": "2026-09-26 05:36:48",
+            "doctor_id": 2,
+            "doctor_name": "Dr. Luis Pérez",
+            "id": 2,
+            "patient_id": 1,
+            "patient_name": "AuxiliarAPI ActivoA",
+            "reason": "Consulta",
+            "specialty": "Pediatría",
+            "status": "PROGRAMADA"
+          },
+          "evidence": [
+            "HTTP-052",
+            "HTTP-053"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-052",
+        "HTTP-053"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-24",
+      "title": "CP-24 - Hora de cierre en límite superior",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:50.536120-06:00",
+      "finished_at": "2026-09-25T23:36:54.642494-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar paciente activo, médico disponible y día hábil futuro.",
+          "expected": "Las precondiciones quedan preparadas."
+        },
+        {
+          "number": "2",
+          "action": "Programar una cita a las 16:30.",
+          "expected": "La hora coincide con el límite superior permitido."
+        },
+        {
+          "number": "3",
+          "action": "Enviar la solicitud.",
+          "expected": "La cita se registra correctamente."
+        }
+      ],
+      "data": {
+        "payload": {
+          "patient_id": 1,
+          "doctor_id": 2,
+          "appointment_date": "2026-09-28",
+          "appointment_time": "16:30",
+          "reason": "Consulta"
+        },
+        "appointment_id": 3
+      },
+      "checks": [
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 201,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 201,
+            "body": {
+              "data": {
+                "id": 3
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-054"
+          ]
+        },
+        {
+          "check": "Cita persistida PROGRAMADA con horario límite",
+          "passed": true,
+          "expected": {
+            "patient_id": 1,
+            "doctor_id": 2,
+            "appointment_date": "2026-09-28",
+            "appointment_time": "16:30",
+            "reason": "Consulta",
+            "status": "PROGRAMADA"
+          },
+          "actual": {
+            "appointment_date": "2026-09-28",
+            "appointment_time": "16:30",
+            "created_at": "2026-09-26 05:36:52",
+            "doctor_id": 2,
+            "doctor_name": "Dr. Luis Pérez",
+            "id": 3,
+            "patient_id": 1,
+            "patient_name": "AuxiliarAPI ActivoA",
+            "reason": "Consulta",
+            "specialty": "Pediatría",
+            "status": "PROGRAMADA"
+          },
+          "evidence": [
+            "HTTP-054",
+            "HTTP-055"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-054",
+        "HTTP-055"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-25",
+      "title": "CP-25 - Transición PROGRAMADA a CONFIRMADA",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:36:54.643165-06:00",
+      "finished_at": "2026-09-25T23:37:02.865740-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar una cita en estado PROGRAMADA.",
+          "expected": "La cita queda seleccionada."
+        },
+        {
+          "number": "2",
+          "action": "Solicitar el cambio de estado a CONFIRMADA.",
+          "expected": "La transición es aceptada."
+        },
+        {
+          "number": "3",
+          "action": "Consultar nuevamente la cita.",
+          "expected": "La cita queda en estado CONFIRMADA."
+        }
+      ],
+      "data": {
+        "appointment_id": 4
+      },
+      "checks": [
+        {
+          "check": "Precondición: estado inicial",
+          "passed": true,
+          "expected": "PROGRAMADA",
+          "actual": "PROGRAMADA",
+          "evidence": [
+            "HTTP-057"
+          ]
+        },
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 200,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 200,
+            "body": {
+              "data": {
+                "id": 4,
+                "status": "CONFIRMADA"
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-058"
+          ]
+        },
+        {
+          "check": "Estado persistido correcto",
+          "passed": true,
+          "expected": "CONFIRMADA",
+          "actual": "CONFIRMADA",
+          "evidence": [
+            "HTTP-058",
+            "HTTP-059"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-056",
+        "HTTP-057",
+        "HTTP-058",
+        "HTTP-059"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-26",
+      "title": "CP-26 - Transición PROGRAMADA a CANCELADA",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:37:02.866439-06:00",
+      "finished_at": "2026-09-25T23:37:11.049196-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar una cita en estado PROGRAMADA.",
+          "expected": "La cita queda seleccionada."
+        },
+        {
+          "number": "2",
+          "action": "Solicitar el cambio de estado a CANCELADA.",
+          "expected": "La transición es aceptada."
+        },
+        {
+          "number": "3",
+          "action": "Consultar la agenda.",
+          "expected": "La cita queda en estado CANCELADA."
+        }
+      ],
+      "data": {
+        "appointment_id": 5
+      },
+      "checks": [
+        {
+          "check": "Precondición: estado inicial",
+          "passed": true,
+          "expected": "PROGRAMADA",
+          "actual": "PROGRAMADA",
+          "evidence": [
+            "HTTP-061"
+          ]
+        },
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 200,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 200,
+            "body": {
+              "data": {
+                "id": 5,
+                "status": "CANCELADA"
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-062"
+          ]
+        },
+        {
+          "check": "Estado persistido correcto",
+          "passed": true,
+          "expected": "CANCELADA",
+          "actual": "CANCELADA",
+          "evidence": [
+            "HTTP-062",
+            "HTTP-063"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-060",
+        "HTTP-061",
+        "HTTP-062",
+        "HTTP-063"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-27",
+      "title": "CP-27 - Transición CONFIRMADA a NO_ASISTIO",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:37:11.049851-06:00",
+      "finished_at": "2026-09-25T23:37:21.299500-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar una cita en estado CONFIRMADA.",
+          "expected": "La cita queda seleccionada."
+        },
+        {
+          "number": "2",
+          "action": "Solicitar el cambio de estado a NO_ASISTIO.",
+          "expected": "La transición es aceptada."
+        },
+        {
+          "number": "3",
+          "action": "Consultar la cita.",
+          "expected": "La cita queda en estado NO_ASISTIO."
+        }
+      ],
+      "data": {
+        "appointment_id": 6
+      },
+      "checks": [
+        {
+          "check": "Precondición: estado inicial",
+          "passed": true,
+          "expected": "CONFIRMADA",
+          "actual": "CONFIRMADA",
+          "evidence": [
+            "HTTP-066"
+          ]
+        },
+        {
+          "check": "Estado HTTP y JSON de éxito",
+          "passed": true,
+          "expected": {
+            "http_status": 200,
+            "ok": true
+          },
+          "actual": {
+            "http_status": 200,
+            "body": {
+              "data": {
+                "id": 6,
+                "status": "NO_ASISTIO"
+              },
+              "ok": true
+            }
+          },
+          "evidence": [
+            "HTTP-067"
+          ]
+        },
+        {
+          "check": "Estado persistido correcto",
+          "passed": true,
+          "expected": "NO_ASISTIO",
+          "actual": "NO_ASISTIO",
+          "evidence": [
+            "HTTP-067",
+            "HTTP-068"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-064",
+        "HTTP-065",
+        "HTTP-066",
+        "HTTP-067",
+        "HTTP-068"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-28",
+      "title": "CP-28 - Rechazar transición desde estado final",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:37:21.300197-06:00",
+      "finished_at": "2026-09-25T23:37:31.579869-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar una cita en estado CANCELADA.",
+          "expected": "La cita final queda seleccionada."
+        },
+        {
+          "number": "2",
+          "action": "Solicitar el cambio de CANCELADA a CONFIRMADA.",
+          "expected": "La transición es rechazada con Transición no permitida."
+        },
+        {
+          "number": "3",
+          "action": "Consultar la cita.",
+          "expected": "La cita continúa en estado CANCELADA."
+        }
+      ],
+      "data": {
+        "appointment_id": 7
+      },
+      "checks": [
+        {
+          "check": "Precondición: estado inicial",
+          "passed": true,
+          "expected": "CANCELADA",
+          "actual": "CANCELADA",
+          "evidence": [
+            "HTTP-071"
+          ]
+        },
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Transición no permitida"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Transición no permitida: CANCELADA -> CONFIRMADA",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-072"
+          ]
+        },
+        {
+          "check": "Estado persistido correcto",
+          "passed": true,
+          "expected": "CANCELADA",
+          "actual": "CANCELADA",
+          "evidence": [
+            "HTTP-072",
+            "HTTP-073"
+          ]
+        },
+        {
+          "check": "Registro original íntegro",
+          "passed": true,
+          "expected": {
+            "appointment_date": "2026-09-28",
+            "appointment_time": "13:30",
+            "created_at": "2026-09-26 05:37:23",
+            "doctor_id": 2,
+            "doctor_name": "Dr. Luis Pérez",
+            "id": 7,
+            "patient_id": 1,
+            "patient_name": "AuxiliarAPI ActivoA",
+            "reason": "Auxiliar CP-28 E5-API-20260925T233502-0600",
+            "specialty": "Pediatría",
+            "status": "CANCELADA"
+          },
+          "actual": {
+            "appointment_date": "2026-09-28",
+            "appointment_time": "13:30",
+            "created_at": "2026-09-26 05:37:23",
+            "doctor_id": 2,
+            "doctor_name": "Dr. Luis Pérez",
+            "id": 7,
+            "patient_id": 1,
+            "patient_name": "AuxiliarAPI ActivoA",
+            "reason": "Auxiliar CP-28 E5-API-20260925T233502-0600",
+            "specialty": "Pediatría",
+            "status": "CANCELADA"
+          },
+          "evidence": [
+            "HTTP-071",
+            "HTTP-073"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-069",
+        "HTTP-070",
+        "HTTP-071",
+        "HTTP-072",
+        "HTTP-073"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    },
+    {
+      "case_id": "CP-30",
+      "title": "CP-30 - Rechazar reprogramación de cita CANCELADA",
+      "run_id": "E5-API-20260925T233502-0600",
+      "channel": "API HTTP real; selección mediante ID y verificación GET",
+      "started_at": "2026-09-25T23:37:31.580892-06:00",
+      "finished_at": "2026-09-25T23:37:41.806513-06:00",
+      "status": "Aprobado",
+      "executor": "Codex, asistencia a ejecución académica autorizada",
+      "xml_step_count": 3,
+      "steps": [
+        {
+          "number": "1",
+          "action": "Seleccionar una cita en estado CANCELADA.",
+          "expected": "La cita queda seleccionada."
+        },
+        {
+          "number": "2",
+          "action": "Intentar reprogramarla con una fecha hábil futura y hora 15:00.",
+          "expected": "La operación es rechazada porque el estado no permite reprogramación."
+        },
+        {
+          "number": "3",
+          "action": "Consultar el registro original.",
+          "expected": "La cita conserva fecha, hora y estado anteriores."
+        }
+      ],
+      "data": {
+        "appointment_id": 8
+      },
+      "checks": [
+        {
+          "check": "Cita seleccionada cancelada",
+          "passed": true,
+          "expected": "CANCELADA",
+          "actual": "CANCELADA",
+          "evidence": [
+            "HTTP-076"
+          ]
+        },
+        {
+          "check": "Solicitud rechazada con mensaje esperado",
+          "passed": true,
+          "expected": {
+            "http_status": 400,
+            "ok": false,
+            "error_contains": "Solo se pueden reprogramar citas programadas o confirmadas"
+          },
+          "actual": {
+            "http_status": 400,
+            "body": {
+              "error": "Solo se pueden reprogramar citas programadas o confirmadas",
+              "ok": false
+            }
+          },
+          "evidence": [
+            "HTTP-077"
+          ]
+        },
+        {
+          "check": "Fecha hora estado y demás datos originales preservados",
+          "passed": true,
+          "expected": {
+            "appointment_date": "2026-09-28",
+            "appointment_time": "14:30",
+            "created_at": "2026-09-26 05:37:33",
+            "doctor_id": 2,
+            "doctor_name": "Dr. Luis Pérez",
+            "id": 8,
+            "patient_id": 1,
+            "patient_name": "AuxiliarAPI ActivoA",
+            "reason": "Auxiliar CP-30 E5-API-20260925T233502-0600",
+            "specialty": "Pediatría",
+            "status": "CANCELADA"
+          },
+          "actual": {
+            "appointment_date": "2026-09-28",
+            "appointment_time": "14:30",
+            "created_at": "2026-09-26 05:37:33",
+            "doctor_id": 2,
+            "doctor_name": "Dr. Luis Pérez",
+            "id": 8,
+            "patient_id": 1,
+            "patient_name": "AuxiliarAPI ActivoA",
+            "reason": "Auxiliar CP-30 E5-API-20260925T233502-0600",
+            "specialty": "Pediatría",
+            "status": "CANCELADA"
+          },
+          "evidence": [
+            "HTTP-076",
+            "HTTP-077",
+            "HTTP-078"
+          ]
+        }
+      ],
+      "http_evidence": [
+        "HTTP-074",
+        "HTTP-075",
+        "HTTP-076",
+        "HTTP-077",
+        "HTTP-078"
+      ],
+      "notes": "Resultado funcional API. No acredita visibilidad UI de RNF-09. No implica carga, concurrencia ni automatización Fase 2.",
+      "defect_id": null,
+      "exception": null
+    }
+  ]
+}

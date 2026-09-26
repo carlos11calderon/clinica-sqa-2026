@@ -1,0 +1,41 @@
+{
+  "defects": [
+    {
+      "id": "DEF-01",
+      "title": "El mensaje de credenciales inválidas queda oculto en el formulario de ingreso",
+      "module": "Autenticación",
+      "severity": "Medium",
+      "priority": "2",
+      "requirements": [
+        "RF-01",
+        "RNF-09"
+      ],
+      "test_cases": [
+        "CP-02"
+      ],
+      "case_azure_id": 145,
+      "story_azure_ids": [
+        132
+      ],
+      "preconditions": [
+        "Frontend http://localhost:5173 y backend5000 disponibles.",
+        "Sesión nueva sin acceso autenticado; usuario admin existente."
+      ],
+      "steps": [
+        "Abrir la aplicación en una sesión nueva.",
+        "Ingresar admin con contraseña incorrecta.",
+        "Enviar el formulario y observar la pantalla."
+      ],
+      "expected": "Rechazar el acceso y mostrar Credenciales inválidas en pantalla.",
+      "actual": "HTTP401 correcto; acceso rechazado. El mensaje se escribe dentro de #app-view oculto con display:none, por lo que no se ve en la pantalla de login.",
+      "evidence": [
+        "docs/evidencias/fase1/cp02-http.json",
+        "docs/evidencias/fase1/ui-login-observations.json"
+      ],
+      "status": "Abierto",
+      "azure_id": null,
+      "observed_at": "2026-09-25T23:35:35.6708140-06:00",
+      "origin": "Caso diseñado"
+    }
+  ]
+}

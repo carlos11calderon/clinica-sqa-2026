@@ -1,0 +1,20 @@
+{
+  "invalid_login": {
+    "error_visible": false,
+    "login_display": "grid",
+    "message_text": "Credenciales inválidas",
+    "app_display": "none",
+    "visible_text": "Clínica SQA / Ingreso al gestor académico / Ingresar"
+  },
+  "observed_at": "2026-09-25T23:35:35.6708140-06:00",
+  "valid_login": {
+    "dashboard": {
+      "appointments_today": 0,
+      "pending_appointments": 0,
+      "attended_appointments": 0,
+      "active_patients": 0
+    },
+    "login_still_visible": true,
+    "dashboard_visible": true
+  }
+}

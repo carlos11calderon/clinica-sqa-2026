@@ -1,0 +1,19 @@
+{
+  "time": "2026-09-25T23:33:26.9706990-06:00",
+  "case": "CP-01",
+  "method": "POST",
+  "path": "/api/auth/login",
+  "request": {
+    "password": "<redacted>",
+    "username": "admin"
+  },
+  "status": 200,
+  "body": {
+    "data": {
+      "id": 1,
+      "role": "ADMIN",
+      "username": "admin"
+    },
+    "ok": true
+  }
+}

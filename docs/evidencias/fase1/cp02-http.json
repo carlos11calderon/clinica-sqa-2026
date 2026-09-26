@@ -1,0 +1,15 @@
+{
+  "time": "2026-09-25T23:33:24.8824184-06:00",
+  "case": "CP-02",
+  "method": "POST",
+  "path": "/api/auth/login",
+  "request": {
+    "password": "<redacted>",
+    "username": "admin"
+  },
+  "status": 401,
+  "body": {
+    "error": "Credenciales inválidas",
+    "ok": false
+  }
+}

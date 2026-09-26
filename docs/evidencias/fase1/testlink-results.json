@@ -1,0 +1,168 @@
+{
+    "project_id": 1,
+    "plan_id": 167,
+    "build_id": 1,
+    "executions": {
+        "CP-01": {
+            "id": 1,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-02": {
+            "id": 2,
+            "status": "Failed",
+            "action": "created"
+        },
+        "CP-03": {
+            "id": 3,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-04": {
+            "id": 4,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-05": {
+            "id": 5,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-06": {
+            "id": 6,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-07": {
+            "id": 7,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-08": {
+            "id": 8,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-09": {
+            "id": 9,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-10": {
+            "id": 10,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-11": {
+            "id": 11,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-12": {
+            "id": 12,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-13": {
+            "id": 13,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-14": {
+            "id": 14,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-15": {
+            "id": 15,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-16": {
+            "id": 16,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-17": {
+            "id": 17,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-18": {
+            "id": 18,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-19": {
+            "id": 19,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-20": {
+            "id": 20,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-21": {
+            "id": 21,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-22": {
+            "id": 22,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-23": {
+            "id": 23,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-24": {
+            "id": 24,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-25": {
+            "id": 25,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-26": {
+            "id": 26,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-27": {
+            "id": 27,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-28": {
+            "id": 28,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-29": {
+            "id": 29,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-30": {
+            "id": 30,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-31": {
+            "id": 31,
+            "status": "Passed",
+            "action": "created"
+        },
+        "CP-32": {
+            "id": 32,
+            "status": "Passed",
+            "action": "created"
+        }
+    },
+    "count": 32
+}

@@ -1,0 +1,47 @@
+{
+  "executed_at": "2026-09-25T23:49:41.849462-06:00",
+  "date": "2026-09-25",
+  "http_status": 200,
+  "expected_sqlite": {
+    "active_patients": 9,
+    "appointments_today": 1,
+    "pending_appointments": 10,
+    "attended_appointments": 1
+  },
+  "actual_response": {
+    "data": {
+      "active_patients": 9,
+      "appointments_today": 1,
+      "attended_appointments": 1,
+      "pending_appointments": 10
+    },
+    "ok": true
+  },
+  "agenda_status": 200,
+  "agenda": {
+    "data": [
+      {
+        "appointment_date": "2026-09-25",
+        "appointment_time": "09:00",
+        "created_at": "2026-09-26 05:48:59",
+        "doctor_id": 1,
+        "doctor_name": "Dra. Ana López",
+        "id": 15,
+        "patient_id": 7,
+        "patient_name": "Carlos Prueba",
+        "reason": "Fixture histórica CP32 - solo datos sintéticos",
+        "specialty": "Medicina General",
+        "status": "PROGRAMADA"
+      }
+    ],
+    "ok": true
+  },
+  "ui_observed": {
+    "active_patients": 9,
+    "appointments_today": 1,
+    "pending_appointments": 10,
+    "attended_appointments": 1,
+    "filtered_rows": 1
+  },
+  "all_checks_passed": true
+}

@@ -1,0 +1,72 @@
+{
+  "executed_at": "2026-09-25T23:58:50.985108-06:00",
+  "note": "Cierre mediante API autorizado. Antes de este cierre, la consulta manual informada no figuraba persistida en cita14: seguía CONFIRMADA y sin consulta. No se atribuye esa ausencia a un defecto sin evidencia suficiente.",
+  "http": [
+    {
+      "method": "PUT",
+      "path": "/appointments/16/reschedule",
+      "request": {
+        "appointment_date": "2026-09-29",
+        "appointment_time": "14:00",
+        "doctor_id": 1
+      },
+      "status": 200,
+      "response": {
+        "data": {
+          "id": 16
+        },
+        "ok": true
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/consultations",
+      "request": {
+        "appointment_id": 14,
+        "diagnosis": "Infección respiratoria leve",
+        "treatment": "Reposo e hidratación",
+        "notes": "Control en siete días"
+      },
+      "status": 201,
+      "response": {
+        "data": {
+          "id": 2
+        },
+        "ok": true
+      }
+    }
+  ],
+  "appointments": [
+    {
+      "id": 14,
+      "patient_id": 7,
+      "doctor_id": 1,
+      "appointment_date": "2026-09-28",
+      "appointment_time": "10:30",
+      "reason": "Auxiliar UI CP31",
+      "status": "ATENDIDA",
+      "created_at": "2026-09-26 05:42:51"
+    },
+    {
+      "id": 16,
+      "patient_id": 7,
+      "doctor_id": 1,
+      "appointment_date": "2026-09-29",
+      "appointment_time": "14:00",
+      "reason": "Auxiliar Chrome CP29",
+      "status": "PROGRAMADA",
+      "created_at": "2026-09-26 05:48:59"
+    }
+  ],
+  "consultations": [
+    {
+      "id": 2,
+      "appointment_id": 14,
+      "diagnosis": "Infección respiratoria leve",
+      "treatment": "Reposo e hidratación",
+      "notes": "Control en siete días",
+      "created_at": "2026-09-26 05:58:50"
+    }
+  ],
+  "checks_passed": true
+}

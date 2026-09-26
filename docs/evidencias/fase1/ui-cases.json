@@ -1,0 +1,128 @@
+{
+  "cases": [
+    {
+      "evidence": "docs/evidencias/fase1/cp01-http.json; CAPTURA 1",
+      "observed": "Credenciales válidas: HTTP 200, ok=true, respuesta sin contraseña; el panel principal y sus cuatro indicadores son visibles. El formulario de login permanece encima del panel; observación adicional separada del oráculo de acceso.",
+      "surface": "UI + corroboración HTTP",
+      "module": "Autenticación",
+      "requirement": "RF-01",
+      "code": "CP-01",
+      "defects": [],
+      "azure_id": 144,
+      "result": "Passed",
+      "executed_at": "2026-09-25T23:35:35.6462739-06:00"
+    },
+    {
+      "evidence": "docs/evidencias/fase1/cp02-http.json; ui-login-observations.json",
+      "observed": "Credenciales inválidas: HTTP 401 y JSON ok=false/error=Credenciales inválidas; el panel permanece oculto. El mensaje existe en #message, pero no es visible porque está dentro de #app-view con display:none. El paso 3 del XML exige mostrar el mensaje.",
+      "surface": "UI + corroboración HTTP",
+      "module": "Autenticación",
+      "requirement": "RF-01",
+      "code": "CP-02",
+      "defects": [
+        "DEF-01"
+      ],
+      "azure_id": 145,
+      "result": "Failed",
+      "executed_at": "2026-09-25T23:35:35.6464307-06:00"
+    },
+    {
+      "requirement": "RF-02; RF-03",
+      "executed_at": "2026-09-25T23:41:01.7363049-06:00",
+      "surface": "UI + corroboración HTTP independiente",
+      "result": "Passed",
+      "azure_id": 146,
+      "module": "Pacientes",
+      "defects": [],
+      "evidence": "docs/evidencias/fase1/cp03-persisted.json; ui-http-corroboration.json",
+      "observed": "Formulario enviado con Carlos Prueba, 1995-05-15, teléfono55551234 y correo válido. PacienteUI id7 persistido activo y visible en tabla. Respuesta201 corroborada en segunda ejecución API complementaria con dataset separado.",
+      "code": "CP-03"
+    },
+    {
+      "requirement": "RF-02; RF-03",
+      "executed_at": "2026-09-25T23:41:01.7364195-06:00",
+      "surface": "UI + corroboración HTTP independiente",
+      "result": "Passed",
+      "azure_id": 147,
+      "module": "Pacientes",
+      "defects": [],
+      "evidence": "docs/evidencias/fase1/cp04-persisted.json; ui-http-corroboration.json",
+      "observed": "Formulario enviado con Ana López,1988-10-20,teléfono55559876,email vacío. PacienteUI id8 persistido activo, correo vacío, visible con guion en columna. Respuesta201 corroborada en segunda ejecución API complementaria.",
+      "code": "CP-04"
+    },
+    {
+      "requirement": "RF-04",
+      "executed_at": "2026-09-25T23:41:01.7364537-06:00",
+      "surface": "UI + HTTP",
+      "result": "Passed",
+      "azure_id": 154,
+      "module": "Pacientes",
+      "defects": [],
+      "evidence": "docs/evidencias/fase1/ui-http-corroboration.json",
+      "observed": "Al escribir Prueba, la tabla muestra Carlos Prueba con sus datos. La consulta GET devuelveHTTP200 y coincidencias de apellido.",
+      "code": "CP-11"
+    },
+    {
+      "code": "CP-12",
+      "azure_id": 155,
+      "requirement": "RF-04",
+      "module": "Pacientes",
+      "result": "Passed",
+      "surface": "UI + HTTP + persistencia cuando corresponde",
+      "observed": "Sin registros visible al buscar ZZZ-No-Existe-999; GET HTTP200 con colección vacía.",
+      "evidence": "docs/evidencias/fase1/cp12-empty.json; ui-http-corroboration.json",
+      "defects": [],
+      "executed_at": "2026-09-25T23:49:41.849462-06:00"
+    },
+    {
+      "code": "CP-16",
+      "azure_id": 159,
+      "requirement": "RF-07; RF-08",
+      "module": "Agenda",
+      "result": "Passed",
+      "surface": "UI + HTTP + persistencia cuando corresponde",
+      "observed": "Cita UI id9 creada y observada PROGRAMADA para paciente7/médico1,2026-09-28 09:00,Control general. API independiente id10 devuelve201. Posterior cancelación accidental de herramienta registrada en setup; no forma parte del resultado original.",
+      "evidence": "docs/evidencias/fase1/cp16-persisted.json; ui-http-corroboration.json; ui-fixtures.json",
+      "defects": [],
+      "executed_at": "2026-09-25T23:49:41.849462-06:00"
+    },
+    {
+      "code": "CP-32",
+      "azure_id": 175,
+      "requirement": "RF-12",
+      "module": "Dashboard",
+      "result": "Passed",
+      "surface": "UI + HTTP + persistencia cuando corresponde",
+      "observed": "Dashboard UI y GET HTTP200 coinciden con SQLite:9 pacientes activos,1 cita hoy,10 pendientes,1 atendida. Filtro2026-09-25 muestra únicamente1cita de esa fecha. Fixture histórica sintética documentada separadamente.",
+      "evidence": "docs/evidencias/fase1/cp32-setup.json; cp32-observed.json",
+      "defects": [],
+      "executed_at": "2026-09-25T23:49:41.849462-06:00"
+    },
+    {
+      "code": "CP-29",
+      "azure_id": 172,
+      "requirement": "RF-09",
+      "module": "Agenda",
+      "result": "Passed",
+      "surface": "API real + SQLite + verificación visual en Chrome",
+      "observed": "PUT HTTP200 reprogramó cita16 a2026-09-29 14:00; conserva PROGRAMADA. SQLite y tabla de Chrome coinciden.",
+      "evidence": "docs/evidencias/fase1/cp29-cp31-final.json",
+      "defects": [],
+      "executed_at": "2026-09-25T23:58:50.985108-06:00",
+      "notes": "Cierre funcional por API autorizado; los diálogos no se acreditan como flujo UI automatizado completo."
+    },
+    {
+      "code": "CP-31",
+      "azure_id": 174,
+      "requirement": "RF-11",
+      "module": "Consultas",
+      "result": "Passed",
+      "surface": "API real + SQLite + verificación visual en Chrome",
+      "observed": "POST HTTP201 creó exactamente una consulta (id2) para cita14. Diagnóstico, tratamiento y notas exactos; cita ATENDIDA en SQLite y tabla Chrome.",
+      "evidence": "docs/evidencias/fase1/cp29-cp31-final.json",
+      "defects": [],
+      "executed_at": "2026-09-25T23:58:50.985108-06:00",
+      "notes": "Cierre funcional por API autorizado; los diálogos no se acreditan como flujo UI automatizado completo."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "automation_note": "Cita9 originalmente creada por CP16 fue cancelada accidentalmente al usar click en la herramienta de navegador. No es un defecto del producto. Se preparan citas independientes para CP29 y CP31; se usarán controles de teclado.",
+  "fixtures": [
+    {
+      "body": {
+        "data": {
+          "id": 13
+        },
+        "ok": true
+      },
+      "kind": "PRECONDITION_SETUP",
+      "at": "2026-09-25T23:42:51.2623968-06:00",
+      "http": 201,
+      "payload": {
+        "doctor_id": 1,
+        "appointment_date": "2026-09-28",
+        "patient_id": 7,
+        "appointment_time": "10:00",
+        "reason": "Auxiliar UI CP29"
+      }
+    },
+    {
+      "body": {
+        "data": {
+          "id": 14
+        },
+        "ok": true
+      },
+      "kind": "PRECONDITION_SETUP",
+      "at": "2026-09-25T23:42:51.2732707-06:00",
+      "http": 201,
+      "payload": {
+        "doctor_id": 1,
+        "appointment_date": "2026-09-28",
+        "patient_id": 7,
+        "appointment_time": "10:30",
+        "reason": "Auxiliar UI CP31"
+      }
+    }
+  ],
+  "confirmed": {
+    "data": {
+      "id": 14,
+      "status": "CONFIRMADA"
+    },
+    "ok": true
+  }
+}

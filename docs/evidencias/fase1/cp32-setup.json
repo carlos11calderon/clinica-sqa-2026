@@ -1,0 +1,32 @@
+{
+  "prepared_at": "2026-09-25T23:48:59.111814-06:00",
+  "purpose": "PRECONDITION_SETUP - no es ejecución de caso",
+  "today": "2026-09-25",
+  "historical_fixture": {
+    "id": 15,
+    "patient_id": 7,
+    "doctor_id": 1,
+    "appointment_date": "2026-09-25",
+    "appointment_time": "09:00",
+    "reason": "Fixture histórica CP32 - solo datos sintéticos",
+    "status": "PROGRAMADA",
+    "created_at": "2026-09-26 05:48:59"
+  },
+  "note": "Registro histórico preparado directamente en SQLite para probar consulta/dashboard fuera del horario de reservas; no altera reglas ni reloj. Citas 9 y13 cambiadas por interacción errónea de herramienta; no se cuentan como defecto.",
+  "cp29_fixture": {
+    "request": {
+      "patient_id": 7,
+      "doctor_id": 1,
+      "appointment_date": "2026-09-28",
+      "appointment_time": "11:30",
+      "reason": "Auxiliar Chrome CP29"
+    },
+    "http_status": 201,
+    "response": {
+      "data": {
+        "id": 16
+      },
+      "ok": true
+    }
+  }
+}

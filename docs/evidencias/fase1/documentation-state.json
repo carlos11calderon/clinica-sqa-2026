@@ -1,0 +1,13 @@
+{
+  "testlink": "Registro formal completado y verificado mediante API oficial: proyecto1, plan167, build1;32 ejecuciones únicas (IDs1–32),31Passed,1Failed(CP-02/DEF-01),0Blocked. Evidencia:testlink-results.json.",
+  "captures": {
+    "1": "Tomada por el usuario (confirmado)",
+    "3": "Pendiente",
+    "2": "Tomada; confirmada por el usuario",
+    "6": "Pendiente",
+    "5": "Pendiente: Bug aún no creado, AZDO_PAT ausente",
+    "4": "Pendiente",
+    "7": "Fuera del alcance solicitado (E6)"
+  },
+  "azure": "AZDO_PAT no disponible. No se creó Bug; DEF-01 queda listo para registro relacionado con Test Case145 y User Story132."
+}
