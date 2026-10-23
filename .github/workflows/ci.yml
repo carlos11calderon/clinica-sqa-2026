@@ -1,0 +1,65 @@
+name: CI - Validación de ramas
+
+on:
+  pull_request:
+    branches:
+      - DEV
+      - QA
+      - main
+  push:
+    branches:
+      - DEV
+      - QA
+      - main
+
+jobs:
+  build-validation:
+    name: build-validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Instalar dependencias backend
+        run: pip install -r backend/requirements.txt
+
+      - name: Validar backend y endpoint de salud
+        working-directory: backend
+        env:
+          DATABASE_PATH: /tmp/clinic-ci.db
+        run: |
+          python - <<'PY'
+          from app import create_app
+
+          app = create_app({"TESTING": True})
+          client = app.test_client()
+          response = client.get("/api/health")
+
+          assert response.status_code == 200, (
+              f"/api/health devolvió HTTP {response.status_code}"
+          )
+          print("Backend OK - /api/health HTTP 200")
+          PY
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias frontend
+        working-directory: frontend
+        run: npm ci
+
+      - name: Compilar frontend
+        working-directory: frontend
+        run: npm run build
