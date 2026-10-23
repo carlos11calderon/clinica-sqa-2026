@@ -1,0 +1,104 @@
+name: CI - Validación de ramas
+
+on:
+  pull_request:
+    branches:
+      - DEV
+      - QA
+      - main
+  push:
+    branches:
+      - DEV
+      - QA
+      - main
+
+jobs:
+  build-validation:
+    name: build-validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+
+      - name: Instalar dependencias backend
+        run: pip install -r backend/requirements-dev.txt
+
+      - name: Ejecutar pruebas unitarias backend y cobertura
+        working-directory: backend
+        run: >
+          pytest -q tests
+          --cov=app.services.validation
+          --cov=app.services.appointments
+          --cov-report=term-missing
+          --cov-report=xml:coverage.xml
+          --cov-fail-under=70
+
+      - name: Validar backend y endpoint de salud
+        working-directory: backend
+        env:
+          DATABASE_PATH: /tmp/clinic-ci.db
+        run: |
+          python - <<'PY'
+          from app import create_app
+
+          app = create_app({"TESTING": True})
+          client = app.test_client()
+          response = client.get("/api/health")
+
+          assert response.status_code == 200, (
+              f"/api/health devolvió HTTP {response.status_code}"
+          )
+          print("Backend OK - /api/health HTTP 200")
+          PY
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias frontend
+        working-directory: frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Ejecutar pruebas unitarias frontend
+        working-directory: frontend
+        run: npm test
+
+      - name: Compilar frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Ejecutar pruebas de API con Newman
+        env:
+          DATABASE_PATH: /tmp/clinic-newman.db
+        run: |
+          rm -f "$DATABASE_PATH"
+          gunicorn --chdir backend --bind 127.0.0.1:5000 --workers 1 --threads 2 --access-logfile - --error-logfile - 'app:create_app()' > /tmp/clinic-newman.log 2>&1 &
+          API_PID=$!
+          trap 'kill "$API_PID" 2>/dev/null || true' EXIT
+
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:5000/api/health > /dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              echo "La API no inició correctamente."
+              cat /tmp/clinic-newman.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+          npx --yes newman@6.2.1 run postman/Clinica_SQA_E11.postman_collection.json             --env-var baseUrl=http://127.0.0.1:5000/api             --reporters cli
