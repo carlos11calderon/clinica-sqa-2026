@@ -119,6 +119,37 @@ jobs:
             --env-var baseUrl=http://127.0.0.1:5000/api \
             --reporters cli
 
+      - name: Validar script k6 E14 en modo smoke
+        env:
+          DATABASE_PATH: /tmp/clinic-k6-smoke.db
+        run: |
+          rm -f "$DATABASE_PATH"
+          gunicorn --chdir backend --bind 127.0.0.1:5000 --workers 1 --threads 2 --access-logfile - --error-logfile - 'app:create_app()' > /tmp/clinic-k6-smoke.log 2>&1 &
+          API_PID=$!
+          trap 'kill "$API_PID" 2>/dev/null || true' EXIT
+
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:5000/api/health > /dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              echo "La API no inició correctamente para el smoke de k6."
+              cat /tmp/clinic-k6-smoke.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+          mkdir -p artifacts
+          docker run --rm \
+            --network host \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            -e TARGET_URL=http://127.0.0.1:5000 \
+            -e K6_PROFILE=smoke \
+            grafana/k6:2.3.0 \
+            run load/k6_e14.js
+
       - name: Desplegar en Render
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
