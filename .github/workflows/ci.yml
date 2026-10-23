@@ -79,3 +79,26 @@ jobs:
       - name: Compilar frontend
         working-directory: frontend
         run: npm run build
+
+      - name: Ejecutar pruebas de API con Newman
+        env:
+          DATABASE_PATH: /tmp/clinic-newman.db
+        run: |
+          rm -f "$DATABASE_PATH"
+          gunicorn --chdir backend --bind 127.0.0.1:5000 --workers 1 --threads 2 --access-logfile - --error-logfile - 'app:create_app()' > /tmp/clinic-newman.log 2>&1 &
+          API_PID=$!
+          trap 'kill "$API_PID" 2>/dev/null || true' EXIT
+
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:5000/api/health > /dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              echo "La API no inició correctamente."
+              cat /tmp/clinic-newman.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+          npx --yes newman@6.2.1 run postman/Clinica_SQA_E11.postman_collection.json             --env-var baseUrl=http://127.0.0.1:5000/api             --reporters cli
