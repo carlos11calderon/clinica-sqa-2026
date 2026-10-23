@@ -35,8 +35,13 @@ jobs:
 
       - name: Ejecutar pruebas unitarias backend y cobertura
         working-directory: backend
-        run: |
-          pytest -q tests             --cov=app.services.validation             --cov=app.services.appointments             --cov-report=term-missing             --cov-report=xml:coverage.xml             --cov-fail-under=70
+        run: >
+          pytest -q tests
+          --cov=app.services.validation
+          --cov=app.services.appointments
+          --cov-report=term-missing
+          --cov-report=xml:coverage.xml
+          --cov-fail-under=70
 
       - name: Validar backend y endpoint de salud
         working-directory: backend
@@ -65,7 +70,7 @@ jobs:
 
       - name: Instalar dependencias frontend
         working-directory: frontend
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Ejecutar pruebas unitarias frontend
         working-directory: frontend
