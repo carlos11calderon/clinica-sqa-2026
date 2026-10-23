@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Obtener código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -79,6 +81,16 @@ jobs:
       - name: Compilar frontend
         working-directory: frontend
         run: npm run build
+
+      - name: Analizar código con SonarQube
+        run: bash scripts/sonar_e12.sh baseline
+
+      - name: Guardar evidencia SonarQube
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonar-e12-summary
+          path: sonar-e12-summary.json
+          if-no-files-found: error
 
       - name: Ejecutar pruebas de API con Newman
         env:
