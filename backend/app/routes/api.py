@@ -1,3 +1,4 @@
+import os
 from datetime import date
 from flask import Blueprint, jsonify, request
 from app.db import get_db
@@ -27,7 +28,11 @@ def handle_value_error(error):
 
 @api.get("/health")
 def health():
-    return ok({"status": "UP"})
+    return ok({
+        "status": "UP",
+        "environment": "render" if os.getenv("RENDER") == "true" else "local",
+        "commit": os.getenv("RENDER_GIT_COMMIT", "local"),
+    })
 
 
 @api.post("/auth/login")
