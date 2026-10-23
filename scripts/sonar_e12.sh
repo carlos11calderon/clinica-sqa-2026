@@ -43,48 +43,52 @@ fi
 echo "::add-mask::$SONAR_TOKEN"
 
 echo "Ejecutando análisis SonarQube..."
+rm -rf .scannerwork
+
 docker run --rm   --network host   --user root   -e SONAR_HOST_URL="$SONAR_URL"   -e SONAR_TOKEN="$SONAR_TOKEN"   -v "$PWD:/usr/src"   sonarsource/sonar-scanner-cli:latest   -Dsonar.qualitygate.wait=false
 
-echo "Esperando procesamiento del análisis..."
-for attempt in {1..60}; do
-  measures_http="$(curl -sS -o /tmp/sonar-measures.json -w '%{http_code}'     -H "Authorization: Bearer $SONAR_TOKEN"     "${SONAR_URL}/api/measures/component?component=${PROJECT_KEY}&metricKeys=bugs,vulnerabilities,code_smells,duplicated_lines_density,sqale_index,reliability_rating,security_rating,sqale_rating")"
+REPORT_TASK=".scannerwork/report-task.txt"
+if [ ! -f "$REPORT_TASK" ]; then
+  echo "No se generó $REPORT_TASK."
+  exit 1
+fi
 
-  if [ "$measures_http" = "200" ] && jq -e '.component.measures' /tmp/sonar-measures.json >/dev/null 2>&1; then
+CE_TASK_ID="$(grep '^ceTaskId=' "$REPORT_TASK" | cut -d= -f2)"
+if [ -z "$CE_TASK_ID" ]; then
+  echo "No se encontró ceTaskId en $REPORT_TASK."
+  cat "$REPORT_TASK"
+  exit 1
+fi
+
+echo "Esperando a que SonarQube termine el Compute Engine task..."
+for attempt in {1..90}; do
+  curl -fsS     -H "Authorization: Bearer $SONAR_TOKEN"     "${SONAR_URL}/api/ce/task?id=${CE_TASK_ID}"     > /tmp/sonar-ce-task.json
+
+  ce_status="$(jq -r '.task.status // empty' /tmp/sonar-ce-task.json)"
+
+  if [ "$ce_status" = "SUCCESS" ]; then
+    echo "Compute Engine task completado."
     break
   fi
 
-  if [ "$attempt" -eq 60 ]; then
-    echo "No fue posible obtener las métricas de SonarQube."
-    cat /tmp/sonar-measures.json || true
+  if [ "$ce_status" = "FAILED" ] || [ "$ce_status" = "CANCELED" ]; then
+    echo "El análisis de SonarQube terminó con estado $ce_status."
+    cat /tmp/sonar-ce-task.json
     exit 1
   fi
+
+  if [ "$attempt" -eq 90 ]; then
+    echo "El análisis de SonarQube no terminó dentro del tiempo esperado."
+    cat /tmp/sonar-ce-task.json
+    exit 1
+  fi
+
   sleep 2
 done
 
-expected_issues="$(jq -r '
-  [.component.measures[]
-   | select(.metric == "bugs" or .metric == "vulnerabilities" or .metric == "code_smells")
-   | (.value // "0" | tonumber)]
-  | add // 0
-' /tmp/sonar-measures.json)"
+curl -fsS   -H "Authorization: Bearer $SONAR_TOKEN"   "${SONAR_URL}/api/measures/component?component=${PROJECT_KEY}&metricKeys=ncloc,bugs,vulnerabilities,code_smells,duplicated_lines_density,sqale_index,reliability_rating,security_rating,sqale_rating"   > /tmp/sonar-measures.json
 
-echo "Esperando indexación de issues (esperados: $expected_issues)..."
-for attempt in {1..30}; do
-  curl -fsS     -H "Authorization: Bearer $SONAR_TOKEN"     "${SONAR_URL}/api/issues/search?componentKeys=${PROJECT_KEY}&ps=500&facets=severities,types"     > /tmp/sonar-issues.json
-
-  indexed_total="$(jq -r '.paging.total // .total // 0' /tmp/sonar-issues.json)"
-  returned_count="$(jq -r '.issues | length' /tmp/sonar-issues.json)"
-
-  if [ "$expected_issues" -eq 0 ] || [ "$indexed_total" -ge "$expected_issues" ] || [ "$returned_count" -ge "$expected_issues" ]; then
-    break
-  fi
-
-  if [ "$attempt" -eq 30 ]; then
-    echo "La indexación de issues no alcanzó el total de métricas; se conservará la respuesta disponible."
-  else
-    sleep 2
-  fi
-done
+curl -fsS   -H "Authorization: Bearer $SONAR_TOKEN"   "${SONAR_URL}/api/issues/search?componentKeys=${PROJECT_KEY}&ps=500&facets=severities,types"   > /tmp/sonar-issues.json
 
 curl -fsS   -H "Authorization: Bearer $SONAR_TOKEN"   "${SONAR_URL}/api/qualitygates/project_status?projectKey=${PROJECT_KEY}"   > /tmp/sonar-quality-gate.json
 
