@@ -43,11 +43,15 @@ fi
 echo "::add-mask::$SONAR_TOKEN"
 
 echo "Ejecutando análisis SonarQube..."
-rm -rf .scannerwork
+rm -f sonar-report-task.txt
 
-docker run --rm   --network host   --user root   -e SONAR_HOST_URL="$SONAR_URL"   -e SONAR_TOKEN="$SONAR_TOKEN"   -v "$PWD:/usr/src"   sonarsource/sonar-scanner-cli:latest   -Dsonar.qualitygate.wait=false
+if [ -f backend/coverage.xml ]; then
+  sed -i 's#<source>.*</source>#<source>/usr/src/backend</source>#' backend/coverage.xml
+fi
 
-REPORT_TASK=".scannerwork/report-task.txt"
+docker run --rm   --network host   --user root   -e SONAR_HOST_URL="$SONAR_URL"   -e SONAR_TOKEN="$SONAR_TOKEN"   -v "$PWD:/usr/src"   sonarsource/sonar-scanner-cli:latest   -Dsonar.qualitygate.wait=false   -Dsonar.scanner.metadataFilePath=/usr/src/sonar-report-task.txt
+
+REPORT_TASK="sonar-report-task.txt"
 if [ ! -f "$REPORT_TASK" ]; then
   echo "No se generó $REPORT_TASK."
   exit 1
