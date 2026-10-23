@@ -7,10 +7,9 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "vitest run"
+    "test": "npx --yes vitest@3.2.4 run"
   },
   "devDependencies": {
-    "vite": "^7.1.7",
-    "vitest": "^3.2.4"
+    "vite": "^7.1.7"
   }
 }
