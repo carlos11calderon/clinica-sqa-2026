@@ -148,7 +148,28 @@ La ejecución falla si:
 - falla una aserción de contenido;
 - Newman termina con código distinto de cero.
 
-Los resultados reales del primer pipeline exitoso se registrarán en este documento después de ejecutar el Pull Request de E11.
+## 9. Resultados reales del pipeline
+
+La primera ejecución del Pull Request #3 finalizó exitosamente.
+
+Resultados de Newman:
+
+- Iteraciones: **1**, fallidas: **0**.
+- Solicitudes ejecutadas: **19**, fallidas: **0**.
+- Aserciones ejecutadas: **57**, fallidas: **0**.
+- Duración total de Newman: **584 ms**.
+- Tiempo de respuesta promedio: **4 ms** en la instancia temporal local del runner.
+- Datos recibidos: aproximadamente **1.78 kB**.
+- Job `build-validation`: **success**.
+
+La misma ejecución también conservó E10 en verde:
+
+- Backend: **32 pruebas aprobadas**.
+- Frontend: **14 pruebas aprobadas**.
+- Cobertura combinada de los módulos críticos medidos: **87.27 %**.
+- Build Vite: exitoso.
+
+No se utiliza el tiempo de respuesta de Newman como resultado de carga o rendimiento; esas métricas corresponden a E14. Aquí únicamente confirma que el flujo de API se ejecutó correctamente dentro del pipeline.
 
 ## 9. Relación con E10
 
