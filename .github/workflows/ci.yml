@@ -1,4 +1,4 @@
-name: CI - Validación de ramas
+name: CI/CD - Clínica SQA
 
 on:
   pull_request:
@@ -23,6 +23,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias frontend
+        working-directory: frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Compilar frontend
+        working-directory: frontend
+        run: npm run build
+
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
@@ -45,6 +60,10 @@ jobs:
           --cov-report=xml:coverage.xml
           --cov-fail-under=70
 
+      - name: Ejecutar pruebas unitarias frontend
+        working-directory: frontend
+        run: npm test
+
       - name: Validar backend y endpoint de salud
         working-directory: backend
         env:
@@ -60,29 +79,12 @@ jobs:
           assert response.status_code == 200, (
               f"/api/health devolvió HTTP {response.status_code}"
           )
+          data = response.get_json()["data"]
+          assert data["status"] == "UP"
           print("Backend OK - /api/health HTTP 200")
           PY
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Instalar dependencias frontend
-        working-directory: frontend
-        run: npm ci --no-audit --no-fund
-
-      - name: Ejecutar pruebas unitarias frontend
-        working-directory: frontend
-        run: npm test
-
-      - name: Compilar frontend
-        working-directory: frontend
-        run: npm run build
-
-      - name: Analizar código con SonarQube
+      - name: Analizar código con SonarQube y Quality Gate
         run: bash scripts/sonar_e12.sh gate
 
       - name: Guardar evidencia SonarQube
@@ -113,4 +115,14 @@ jobs:
             sleep 1
           done
 
-          npx --yes newman@6.2.1 run postman/Clinica_SQA_E11.postman_collection.json             --env-var baseUrl=http://127.0.0.1:5000/api             --reporters cli
+          npx --yes newman@6.2.1 run postman/Clinica_SQA_E11.postman_collection.json \
+            --env-var baseUrl=http://127.0.0.1:5000/api \
+            --reporters cli
+
+      - name: Desplegar en Render
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          RENDER_SERVICE_URL: ${{ vars.RENDER_SERVICE_URL }}
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: bash scripts/deploy_render.sh
