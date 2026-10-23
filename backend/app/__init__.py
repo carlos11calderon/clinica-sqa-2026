@@ -1,4 +1,5 @@
 import os
+import secrets
 from pathlib import Path
 
 from flask import Flask, send_from_directory
@@ -24,7 +25,7 @@ def create_app(test_config=None):
 
     app.config.from_mapping(
         DATABASE_PATH=os.getenv("DATABASE_PATH", str(default_db)),
-        SECRET_KEY=os.getenv("SECRET_KEY", "development-only-change-me"),
+        SECRET_KEY=os.getenv("SECRET_KEY") or secrets.token_hex(32),
     )
     if test_config:
         app.config.update(test_config)
