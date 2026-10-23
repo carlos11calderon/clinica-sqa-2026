@@ -83,7 +83,7 @@ jobs:
         run: npm run build
 
       - name: Analizar código con SonarQube
-        run: bash scripts/sonar_e12.sh baseline
+        run: bash scripts/sonar_e12.sh gate
 
       - name: Guardar evidencia SonarQube
         uses: actions/upload-artifact@v4
