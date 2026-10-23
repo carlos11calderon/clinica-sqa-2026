@@ -2,7 +2,7 @@
 
 Aplicación web académica para gestionar pacientes, citas y consultas médicas. Fue diseñada como objeto de evaluación para un proyecto de Aseguramiento de la Calidad de Software.
 
-## Arquitectura
+## Arquitectura de la solución
 
 Se utiliza un **monorepo con arquitectura cliente-servidor simple**, evitando microservicios:
 
