@@ -1,0 +1,9 @@
+services:
+  - type: web
+    runtime: docker
+    name: clinica-sqa-2026
+    plan: free
+    region: oregon
+    branch: main
+    healthCheckPath: /api/health
+    autoDeployTrigger: off
