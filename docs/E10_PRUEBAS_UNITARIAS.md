@@ -152,13 +152,24 @@ Secuencia de E10:
 
 Si una prueba falla o la cobertura backend cae por debajo de 70 %, el job `build-validation` falla y la promoción no debe continuar.
 
-## 10. Evidencia
+## 10. Evidencia de ejecución
 
-La evidencia definitiva deberá obtenerse del workflow del Pull Request de E10:
+La primera ejecución corregida del pipeline del Pull Request #2 finalizó exitosamente.
 
-- total de pruebas backend aprobadas;
-- cobertura real de `appointments.py` y `validation.py`;
-- total de pruebas frontend aprobadas;
-- resultado final del job `build-validation`.
+Resultados obtenidos:
 
-El valor real de cobertura se registrará en este documento después de la primera ejecución exitosa del pipeline.
+- Backend: **32 pruebas aprobadas**.
+- Frontend: **14 pruebas aprobadas**.
+- Total: **46 pruebas unitarias aprobadas**.
+- `app/services/validation.py`: **100 %** de cobertura.
+- `app/services/appointments.py`: **77 %** de cobertura.
+- Cobertura combinada de ambos módulos críticos: **87.27 %**.
+- Umbral configurado: **70 %**.
+- Incremento respecto de la línea base de 0 %: **+87.27 puntos porcentuales** sobre el alcance medido.
+- Validación de `/api/health`: HTTP 200.
+- Compilación Vite: exitosa.
+- Job `build-validation`: **success**.
+
+La cobertura supera tanto el incremento mínimo de 20 puntos porcentuales solicitado por E10 como el umbral interno de 70 % definido por el equipo.
+
+La evidencia visible queda registrada en GitHub Actions dentro del Pull Request #2.
