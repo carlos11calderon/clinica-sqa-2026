@@ -47,7 +47,7 @@ docker run --rm   --network host   --user root   -e SONAR_HOST_URL="$SONAR_URL" 
 
 echo "Esperando procesamiento del análisis..."
 for attempt in {1..60}; do
-  measures_http="$(curl -sS -o /tmp/sonar-measures.json -w '%{http_code}'     -u "$SONAR_TOKEN:"     "${SONAR_URL}/api/measures/component?component=${PROJECT_KEY}&metricKeys=bugs,vulnerabilities,code_smells,duplicated_lines_density,sqale_index,reliability_rating,security_rating,sqale_rating")"
+  measures_http="$(curl -sS -o /tmp/sonar-measures.json -w '%{http_code}'     -H "Authorization: Bearer $SONAR_TOKEN"     "${SONAR_URL}/api/measures/component?component=${PROJECT_KEY}&metricKeys=bugs,vulnerabilities,code_smells,duplicated_lines_density,sqale_index,reliability_rating,security_rating,sqale_rating")"
 
   if [ "$measures_http" = "200" ] && jq -e '.component.measures' /tmp/sonar-measures.json >/dev/null 2>&1; then
     break
@@ -61,9 +61,32 @@ for attempt in {1..60}; do
   sleep 2
 done
 
-curl -fsS -u "$SONAR_TOKEN:"   "${SONAR_URL}/api/issues/search?componentKeys=${PROJECT_KEY}&ps=500"   > /tmp/sonar-issues.json
+expected_issues="$(jq -r '
+  [.component.measures[]
+   | select(.metric == "bugs" or .metric == "vulnerabilities" or .metric == "code_smells")
+   | (.value // "0" | tonumber)]
+  | add // 0
+' /tmp/sonar-measures.json)"
 
-curl -fsS -u "$SONAR_TOKEN:"   "${SONAR_URL}/api/qualitygates/project_status?projectKey=${PROJECT_KEY}"   > /tmp/sonar-quality-gate.json
+echo "Esperando indexación de issues (esperados: $expected_issues)..."
+for attempt in {1..30}; do
+  curl -fsS     -H "Authorization: Bearer $SONAR_TOKEN"     "${SONAR_URL}/api/issues/search?componentKeys=${PROJECT_KEY}&ps=500&facets=severities,types"     > /tmp/sonar-issues.json
+
+  indexed_total="$(jq -r '.paging.total // .total // 0' /tmp/sonar-issues.json)"
+  returned_count="$(jq -r '.issues | length' /tmp/sonar-issues.json)"
+
+  if [ "$expected_issues" -eq 0 ] || [ "$indexed_total" -ge "$expected_issues" ] || [ "$returned_count" -ge "$expected_issues" ]; then
+    break
+  fi
+
+  if [ "$attempt" -eq 30 ]; then
+    echo "La indexación de issues no alcanzó el total de métricas; se conservará la respuesta disponible."
+  else
+    sleep 2
+  fi
+done
+
+curl -fsS   -H "Authorization: Bearer $SONAR_TOKEN"   "${SONAR_URL}/api/qualitygates/project_status?projectKey=${PROJECT_KEY}"   > /tmp/sonar-quality-gate.json
 
 python - <<'PY'
 import json
@@ -79,15 +102,37 @@ metric_values = {
 }
 
 issue_list = issues.get("issues", [])
+
 severity_counts = {}
-for issue in issue_list:
-    severity = issue.get("severity", "UNKNOWN")
-    severity_counts[severity] = severity_counts.get(severity, 0) + 1
+for facet in issues.get("facets", []):
+    if facet.get("property") == "severities":
+        severity_counts = {
+            item.get("val", "UNKNOWN"): item.get("count", 0)
+            for item in facet.get("values", [])
+        }
+        break
+
+if not severity_counts:
+    for issue in issue_list:
+        severity = issue.get("severity", "UNKNOWN")
+        severity_counts[severity] = severity_counts.get(severity, 0) + 1
+
+type_counts = {}
+for facet in issues.get("facets", []):
+    if facet.get("property") == "types":
+        type_counts = {
+            item.get("val", "UNKNOWN"): item.get("count", 0)
+            for item in facet.get("values", [])
+        }
+        break
 
 summary = {
     "metrics": metric_values,
-    "total_issues": len(issue_list),
+    "api_issue_total": issues.get("paging", {}).get("total", issues.get("total", len(issue_list))),
+    "returned_issues": len(issue_list),
     "issues_by_severity": severity_counts,
+    "issues_by_type": type_counts,
+    "blocker_critical_count": int(severity_counts.get("BLOCKER", 0)) + int(severity_counts.get("CRITICAL", 0)),
     "blocker_critical": [
         {
             "key": i.get("key"),
@@ -97,9 +142,23 @@ summary = {
             "line": i.get("line"),
             "message": i.get("message"),
             "type": i.get("type"),
+            "impacts": i.get("impacts"),
         }
         for i in issue_list
         if i.get("severity") in {"BLOCKER", "CRITICAL"}
+    ],
+    "all_issues": [
+        {
+            "key": i.get("key"),
+            "rule": i.get("rule"),
+            "severity": i.get("severity"),
+            "component": i.get("component"),
+            "line": i.get("line"),
+            "message": i.get("message"),
+            "type": i.get("type"),
+            "impacts": i.get("impacts"),
+        }
+        for i in issue_list
     ],
     "quality_gate": gate.get("projectStatus", {}),
 }
