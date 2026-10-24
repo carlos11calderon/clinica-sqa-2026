@@ -209,7 +209,7 @@ document.querySelector("#login-form").addEventListener("submit", async e => {
   } catch (err) { showMessage(err.message, true); }
 });
 
-(async function init() {
+void (async function init() {
   if (sessionStorage.getItem("clinic-auth") === "1") {
     document.querySelector("#login-view").classList.add("hidden");
     document.querySelector("#app-view").classList.remove("hidden");

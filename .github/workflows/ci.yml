@@ -1,4 +1,4 @@
-name: CI - Validación de ramas
+name: CI/CD - Clínica SQA
 
 on:
   pull_request:
@@ -20,6 +20,23 @@ jobs:
     steps:
       - name: Obtener código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias frontend
+        working-directory: frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Compilar frontend
+        working-directory: frontend
+        run: npm run build
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -43,6 +60,10 @@ jobs:
           --cov-report=xml:coverage.xml
           --cov-fail-under=70
 
+      - name: Ejecutar pruebas unitarias frontend
+        working-directory: frontend
+        run: npm test
+
       - name: Validar backend y endpoint de salud
         working-directory: backend
         env:
@@ -58,27 +79,20 @@ jobs:
           assert response.status_code == 200, (
               f"/api/health devolvió HTTP {response.status_code}"
           )
+          data = response.get_json()["data"]
+          assert data["status"] == "UP"
           print("Backend OK - /api/health HTTP 200")
           PY
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
+      - name: Analizar código con SonarQube y Quality Gate
+        run: bash scripts/sonar_e12.sh gate
+
+      - name: Guardar evidencia SonarQube
+        uses: actions/upload-artifact@v4
         with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Instalar dependencias frontend
-        working-directory: frontend
-        run: npm ci --no-audit --no-fund
-
-      - name: Ejecutar pruebas unitarias frontend
-        working-directory: frontend
-        run: npm test
-
-      - name: Compilar frontend
-        working-directory: frontend
-        run: npm run build
+          name: sonar-e12-summary
+          path: sonar-e12-summary.json
+          if-no-files-found: error
 
       - name: Ejecutar pruebas de API con Newman
         env:
@@ -101,4 +115,45 @@ jobs:
             sleep 1
           done
 
-          npx --yes newman@6.2.1 run postman/Clinica_SQA_E11.postman_collection.json             --env-var baseUrl=http://127.0.0.1:5000/api             --reporters cli
+          npx --yes newman@6.2.1 run postman/Clinica_SQA_E11.postman_collection.json \
+            --env-var baseUrl=http://127.0.0.1:5000/api \
+            --reporters cli
+
+      - name: Validar script k6 E14 en modo smoke
+        env:
+          DATABASE_PATH: /tmp/clinic-k6-smoke.db
+        run: |
+          rm -f "$DATABASE_PATH"
+          gunicorn --chdir backend --bind 127.0.0.1:5000 --workers 1 --threads 2 --access-logfile - --error-logfile - 'app:create_app()' > /tmp/clinic-k6-smoke.log 2>&1 &
+          API_PID=$!
+          trap 'kill "$API_PID" 2>/dev/null || true' EXIT
+
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:5000/api/health > /dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              echo "La API no inició correctamente para el smoke de k6."
+              cat /tmp/clinic-k6-smoke.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+          mkdir -p artifacts
+          docker run --rm \
+            --network host \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            -e TARGET_URL=http://127.0.0.1:5000 \
+            -e K6_PROFILE=smoke \
+            grafana/k6:2.3.0 \
+            run load/k6_e14.js
+
+      - name: Desplegar en Render
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          RENDER_SERVICE_URL: ${{ vars.RENDER_SERVICE_URL }}
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: bash scripts/deploy_render.sh
