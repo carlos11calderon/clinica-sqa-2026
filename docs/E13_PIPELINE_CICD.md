@@ -192,8 +192,17 @@ El pipeline de producción solo se considera exitoso si:
 - el health check confirma `UP`;
 - el commit publicado coincide con el commit validado.
 
-## 9. Configuración externa pendiente
+## 9. Configuración externa
 
-El repositorio contiene toda la configuración de E13.
+El servicio de Render ya existe y se encuentra operativo:
 
-Para ejecutar por primera vez la etapa real de despliegue es necesario que el servicio de Render exista y que se registren en GitHub el deploy hook y la URL pública. Estos valores pertenecen a la cuenta de Render y no deben almacenarse en el repositorio.
+```text
+https://clinica-sqa-2026.onrender.com
+```
+
+En GitHub Actions se configuraron los valores necesarios para el despliegue:
+
+- secret `RENDER_DEPLOY_HOOK_URL`;
+- variable `RENDER_SERVICE_URL`.
+
+El Deploy Hook no se almacena en el repositorio. La ejecución real del despliegue se valida al promover la versión actual a `main`.
