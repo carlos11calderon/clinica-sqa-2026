@@ -1,0 +1,64 @@
+name: E14 - Pruebas de carga cloud
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "CI/CD - Clínica SQA"
+    types:
+      - completed
+
+jobs:
+  load-test:
+    name: k6-load-test
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main'
+      )
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+
+      - name: Validar URL de Render
+        env:
+          TARGET_URL: ${{ vars.RENDER_SERVICE_URL }}
+        run: |
+          if [ -z "$TARGET_URL" ]; then
+            echo "Falta configurar la variable RENDER_SERVICE_URL."
+            exit 1
+          fi
+
+          case "$TARGET_URL" in
+            https://*.onrender.com|https://*.onrender.com/)
+              echo "Ambiente cloud configurado: $TARGET_URL"
+              ;;
+            *)
+              echo "E14 debe ejecutarse contra la URL cloud de Render."
+              exit 1
+              ;;
+          esac
+
+      - name: Ejecutar escenario E14 con k6
+        env:
+          TARGET_URL: ${{ vars.RENDER_SERVICE_URL }}
+        run: |
+          mkdir -p artifacts
+          docker run --rm \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            -e TARGET_URL="$TARGET_URL" \
+            -e K6_PROFILE=load \
+            grafana/k6:2.3.0 \
+            run load/k6_e14.js
+
+      - name: Guardar resultados E14
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e14-k6-results
+          path: artifacts/
+          if-no-files-found: warn

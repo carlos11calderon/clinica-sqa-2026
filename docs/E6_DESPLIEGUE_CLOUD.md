@@ -4,7 +4,11 @@
 
 Preparación y validación Docker local completadas el 26 de septiembre de 2026.
 Proveedor elegido: **Render, Web Service, Docker, plan Free**.
-URL pública: **pendiente de creación del servicio**. El dashboard de Render solicita iniciar sesión; no hay una clave API configurada.
+Servicio desplegado: **clinica-sqa-2026**.
+URL pública: **https://clinica-sqa-2026.onrender.com**.
+Rama desplegada: **main**.
+Región: **Oregon**.
+Estado verificado en Render: **Live**.
 
 ## Arquitectura y build
 
@@ -62,8 +66,8 @@ El contenedor local queda disponible en http://localhost:8080/. Para detenerlo: 
 | Variables de entorno adicionales | Ninguna; conservar PORT proporcionado por Render |
 
 4. Seleccionar **Deploy Web Service**. Render construye ambas etapas del Dockerfile automáticamente; no requiere comandos separados de npm o pip en el panel.
-5. Cuando aparezca **Live**, abrir la URL `https://…onrender.com` asignada y comprobar `/api/health` con HTTP 200 y `status: UP`, así como la pantalla principal. La validación pública aún está pendiente.
-6. Registrar aquí la URL definitiva. Tomar **una captura, número 7**, con la aplicación funcionando y la URL pública visible.
+5. El servicio fue creado y quedó operativo en `https://clinica-sqa-2026.onrender.com`.
+6. Render muestra el servicio en estado **Live** y conectado a la rama `main`. La captura del dashboard conserva evidencia del servicio desplegado y de su historial de despliegues.
 
 ## SQLite y datos académicos
 
