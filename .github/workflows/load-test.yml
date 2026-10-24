@@ -48,12 +48,13 @@ jobs:
         run: |
           mkdir -p artifacts
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$PWD:/workspace" \
             -w /workspace \
             -e TARGET_URL="$TARGET_URL" \
             -e K6_PROFILE=load \
             grafana/k6:2.3.0 \
-            run load/k6_e14.js
+            run load/k6_e14.js | tee artifacts/k6-console.log
 
       - name: Guardar resultados E14
         if: always()
@@ -61,4 +62,4 @@ jobs:
         with:
           name: e14-k6-results
           path: artifacts/
-          if-no-files-found: warn
+          if-no-files-found: error
