@@ -1,5 +1,12 @@
 import "./styles.css";
 import { api } from "./api.js";
+import {
+  activePatients,
+  buildAppointmentsPath,
+  buildPatientsPath,
+  dashboardCards,
+  statusButtons,
+} from "./ui-utils.js";
 
 const app = document.querySelector("#app");
 let doctors = [];
@@ -78,13 +85,7 @@ function formDataToObject(form) {
 
 async function loadDashboard() {
   const d = await api("/dashboard");
-  const cards = [
-    ["Pacientes activos", d.active_patients],
-    ["Citas de hoy", d.appointments_today],
-    ["Citas pendientes", d.pending_appointments],
-    ["Atendidas", d.attended_appointments],
-  ];
-  document.querySelector("#dashboard").innerHTML = cards
+  document.querySelector("#dashboard").innerHTML = dashboardCards(d)
     .map(([label, value]) => `<article class="card"><span>${label}</span><strong>${value}</strong></article>`)
     .join("");
 }
@@ -97,7 +98,7 @@ async function loadDoctors() {
 }
 
 async function loadPatients(q = "") {
-  patients = await api(`/patients${q ? `?q=${encodeURIComponent(q)}` : ""}`);
+  patients = await api(buildPatientsPath(q));
   document.querySelector("#patients-body").innerHTML = patients.map(p => `
     <tr>
       <td>${p.first_name} ${p.last_name}</td><td>${p.birth_date}</td><td>${p.phone}</td>
@@ -105,27 +106,12 @@ async function loadPatients(q = "") {
     </tr>`).join("") || '<tr><td colspan="5">Sin registros</td></tr>';
   document.querySelector("#appointment-patient").innerHTML =
     '<option value="">Seleccione paciente</option>' +
-    patients.filter(p => p.active).map(p => `<option value="${p.id}">${p.first_name} ${p.last_name}</option>`).join("");
-}
-
-function statusButtons(a) {
-  const transitions = {
-    PROGRAMADA: [["CONFIRMADA", "Confirmar"], ["CANCELADA", "Cancelar"]],
-    CONFIRMADA: [["NO_ASISTIO", "No asistió"], ["CANCELADA", "Cancelar"]],
-  };
-  const stateButtons = (transitions[a.status] || []).map(([status, label]) =>
-    `<button class="small secondary" data-id="${a.id}" data-status="${status}">${label}</button>`
-  ).join(" ");
-  const reschedule = ["PROGRAMADA", "CONFIRMADA"].includes(a.status)
-    ? `<button class="small secondary" data-id="${a.id}" data-action="reschedule">Reprogramar</button>` : "";
-  const consultation = a.status === "CONFIRMADA"
-    ? `<button class="small" data-id="${a.id}" data-action="consultation">Registrar consulta</button>` : "";
-  return `${stateButtons} ${reschedule} ${consultation}`;
+    activePatients(patients).map(p => `<option value="${p.id}">${p.first_name} ${p.last_name}</option>`).join("");
 }
 
 async function loadAppointments() {
   const selectedDate = document.querySelector("#agenda-date").value;
-  const rows = await api(`/appointments${selectedDate ? `?date=${selectedDate}` : ""}`);
+  const rows = await api(buildAppointmentsPath(selectedDate));
   currentAppointments = rows;
   document.querySelector("#appointments-body").innerHTML = rows.map(a => `
     <tr>
@@ -223,7 +209,7 @@ document.querySelector("#login-form").addEventListener("submit", async e => {
   } catch (err) { showMessage(err.message, true); }
 });
 
-(async function init() {
+void (async function init() {
   if (sessionStorage.getItem("clinic-auth") === "1") {
     document.querySelector("#login-view").classList.add("hidden");
     document.querySelector("#app-view").classList.remove("hidden");

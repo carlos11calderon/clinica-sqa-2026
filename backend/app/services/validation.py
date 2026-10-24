@@ -1,7 +1,6 @@
 import re
 from datetime import date, datetime, time, timedelta
 
-EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 PHONE_RE = re.compile(r"^[0-9+\- ]{8,15}$")
 
 
@@ -37,8 +36,23 @@ def validate_phone(value):
 
 def validate_email(value):
     value = (value or "").strip()
-    if value and not EMAIL_RE.fullmatch(value):
+    if not value:
+        return value
+
+    if any(character.isspace() for character in value) or value.count("@") != 1:
         raise ValueError("Correo electrónico inválido")
+
+    local_part, domain = value.split("@", 1)
+    domain_labels = domain.split(".")
+
+    valid_domain = (
+        len(domain_labels) >= 2
+        and all(label and not label.startswith("-") and not label.endswith("-") for label in domain_labels)
+    )
+
+    if not local_part or not valid_domain:
+        raise ValueError("Correo electrónico inválido")
+
     return value
 
 
