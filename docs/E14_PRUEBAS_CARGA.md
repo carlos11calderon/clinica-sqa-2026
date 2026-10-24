@@ -113,7 +113,7 @@ Si el destino no es el ambiente cloud, la corrida completa se detiene.
 
 ## 9. Automatización
 
-El workflow `E14 - Pruebas de carga cloud` se ejecuta manualmente desde GitHub Actions después de que la aplicación se encuentre desplegada en Render.
+El workflow `E14 - Pruebas de carga cloud` se ejecuta automáticamente después de que el pipeline `CI/CD - Clínica SQA` termina exitosamente en `main`. También conserva `workflow_dispatch` para una ejecución manual adicional cuando sea necesario.
 
 La variable requerida es:
 
@@ -129,17 +129,61 @@ El script permite un perfil corto `K6_PROFILE=smoke` para validar sintaxis y com
 
 Este perfil **no cuenta como evidencia E14** porque el enunciado exige que la prueba real se ejecute sobre el ambiente cloud.
 
-## 11. Evidencia pendiente
+## 11. Ejecución real en cloud
 
-La evidencia definitiva debe provenir del workflow ejecutado contra Render e incluir:
+La ejecución automática se realizó sobre:
 
-- 50 VUs alcanzados;
-- cinco minutos sostenidos;
-- promedio;
-- p95;
-- throughput;
-- tasa de error;
-- archivo `k6-summary.md`;
-- conclusión de cumplimiento o incumplimiento de RNF-01.
+```text
+https://clinica-sqa-2026.onrender.com
+```
 
-Mientras no exista una URL pública de Render configurada, E14 queda implementado y listo para ejecutar, pero no debe declararse como prueba de carga completada.
+Workflow run:
+
+```text
+40045998040
+```
+
+El escenario completó **6 minutos 30 segundos**, alcanzó **50 VUs**, mantuvo los 50 usuarios virtuales durante **5 minutos** y terminó con **11,762 iteraciones completas** y **0 interrumpidas**.
+
+### Resultados por endpoint
+
+| Endpoint | Promedio | p95 | Throughput | Error | RNF-01 |
+|---|---:|---:|---:|---:|---|
+| `GET /api/appointments` | 434.86 ms | 610.22 ms | 30.05 req/s | 0.00 % | Cumple |
+| `GET /api/dashboard` | 453.68 ms | 691.97 ms | 30.05 req/s | 0.00 % | Cumple |
+
+### Resultado global
+
+| Métrica | Resultado |
+|---|---:|
+| Tiempo promedio | 444.26 ms |
+| Percentil 95 | 681.10 ms |
+| Throughput | 60.11 req/s |
+| Tasa de error HTTP | 0.00 % |
+
+## 12. Conclusión frente a RNF-01
+
+RNF-01 exige que, durante una prueba con 50 usuarios virtuales, el percentil 95 de las solicitudes GET sea menor o igual a **1,000 ms**.
+
+Los resultados fueron:
+
+- agenda: **610.22 ms p95**;
+- dashboard: **691.97 ms p95**.
+
+Ambos endpoints se mantienen por debajo del límite definido y no se registraron errores HTTP.
+
+Por lo tanto, **RNF-01 se cumple** en la ejecución realizada sobre el ambiente cloud de Render.
+
+## 13. Evidencia
+
+La ejecución quedó registrada en GitHub Actions con resultado **success**. Los logs contienen el resumen completo generado por k6.
+
+El workflow se ajustó adicionalmente para conservar en ejecuciones posteriores:
+
+```text
+artifacts/k6-console.log
+artifacts/k6-summary.json
+artifacts/k6-summary.md
+```
+
+como artefacto `e14-k6-results`.
